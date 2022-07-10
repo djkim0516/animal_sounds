@@ -1,0 +1,1238 @@
+{% extends 'mobile/base.html' %}
+
+<!-- static 파일 사용 선언 -->
+{% load static %}
+
+{% block title %}동물 소리(animal_sound){% endblock %}
+
+{% block content %}
+
+
+
+<div id="loading">
+  <img src="/media/loading.gif" alt="loading">
+</div>
+
+<div class="div_wrap" style="width: 100%">
+  <h1 style="margin-top: 24px; margin-bottom: 12px; color: #669966;"><b>동물 정보 업로드</b></h1>
+  <!--h5 style="margin-top: 24px; margin-bottom: 12px;">*동물 울음소리 및 사진 파일을 첨부합니다. 빈 부분은 인공지능을 활용하여 유추합니다.</h5-->
+    <form id="mForm" method="POST" class="post-form" enctype="multipart/form-data">
+   <div class="content" style="margin-top: 0px;">
+<!--왼쪽-->
+       <div>
+        {% csrf_token %}
+        {% if request.user.profile.professional %}
+        <br><label style="color: #669966; font-size: 125%;"><b>동물 소리</b></label><br>
+        <div class="form-group " style="text-align: left;">
+          <div id="sound_dropbox">
+            <label for="id_animal_map-soundfile">소리 파일<b style="color:red;">*</b></label>
+            <input name="animal_map-soundfile" id="id_animal_map-soundfile" class="form-control" type="file" placeholder="..." required>
+          </div>
+        </div>
+        <div class="form-group " style="text-align: left;">
+          <label for="id_animal_map-imagefile">이미지 파일<b style="color:red;">*</b></label>
+          <input name="animal_map-imagefile" id="id_animal_map-imagefile" class="form-control" type="file" required>
+        </div>
+        <label style="color: #669966; font-size: 125%;"><b>동물 구분</b></label><br>
+        <div class="form-group " style="text-align: left;">
+          <label for="id_animal_map-title">종 이름<b style="color:red;">*</b></label>
+          <input name="animal_map-title" id="id_animal_map-title" class="form-control" type="text" placeholder="동물 이름을 입력. ." required>
+        </div>
+        <div class="form-group " style="text-align: left;">
+          <label for="id_animal_map-animalclass">종 구분<b style="color:red;">*</b></label>
+          <select name="animal_map-animalclass" id="id_animal_map-animalclass" class="form-control" type="select" value="m">
+              <option value="m">Mammalia(포유류)</option>
+              <option value="b">Birds(조류)</option>
+              <option value="r">Reptile(파충류)</option>
+              <option value="a">Amphibia(양서류)</option>
+              <option value="i">Insect(곤충)</option>
+            </select>
+        </div>
+        <div class="form-group " style="text-align: left;">
+          <label for="id_animal_map-address">주소<b style="color:red;">*</b></label>
+          <select name="animal_map-address" id="id_animal_map-address" class="form-control" type="select" value="a">
+              <option value="a">서울특별시</option>
+              <option value="b">경기도</option>
+              <option value="c">강원도</option>
+              <option value="d">충청북도</option>
+              <option value="e">충청남도</option>
+              <option value="f">경상북도</option>
+              <option value="g">경상남도</option>
+              <option value="h">전라북도</option>
+              <option value="i">전라남도</option>
+              <option value="j">제주도</option>
+              <option value="k">북한</option>
+            </select>
+        </div>
+          <br><label style="color: #669966; font-size: 125%;"><b>발견 정보</b></label><br>
+        <div class="form-group " style="text-align: left;">
+          <label for="id_animal_map-observed_date">Observed date<b style="color:red;">*</b></label>
+          <input name="animal_map-observed_date" id="id_animal_map-observed_date" class="form-control" type="date" required>
+        </div>
+                <div class="form-group " style="text-align: left;">
+          <label for="id_animal_map-content">Content</label>
+          <input name="animal_map-content" id="id_animal_map-content" class="form-control" type="" placeholder="세부내용. .">
+        </div>
+        {% else %}
+        <br><label style="color: #669966; font-size: 125%;"><b>동물 소리</b></label><br>
+        <div class="form-group " style="text-align: left;">
+          <div id="sound_dropbox">
+            <label for="id_animal_map-soundfile"><b>소리 파일</b><b style="color:red;">*</b></label>
+            <input name="animal_map-soundfile" id="id_animal_map-soundfile" class="form-control" type="file" placeholder="..." required>
+          </div>
+        </div>
+        <div class="form-group " style="text-align: left;">
+          <label for="id_animal_map-imagefile"><b>이미지 파일</b><b style="color:red;">*</b></label>
+          <input name="animal_map-imagefile" id="id_animal_map-imagefile" class="form-control" type="file" required>
+        </div>
+        <br><label style="color: #669966; font-size: 125%;"><b>동물 구분</b></label><br>
+        <div class="form-group " style="text-align: left;">
+          <label for="id_animal_map-title"><b>종 이름</b></label>
+          <input name="animal_map-title" id="id_animal_map-title" class="form-control" type="text" placeholder="동물 이름을 입력. .">
+        </div>
+        <div class="form-group " style="text-align: left;">
+          <label for="id_animal_map-animalclass"><b>종 구분</b><b style="color:red;">*</b></label>
+          <select name="animal_map-animalclass" id="id_animal_map-animalclass" class="form-control" type="select" value="m">
+              <option value="m">Mammalia(포유류)</option>
+              <option value="b">Birds(조류)</option>
+              <option value="r">Reptile(파충류)</option>
+              <option value="a">Amphibia(양서류)</option>
+              <option value="i">Insect(곤충)</option>
+            </select>
+        </div>
+        <div class="form-group " style="text-align: left;">
+          <label for="id_animal_map-address"><b>주소</b><b style="color:red;">*</b></label>
+          <select name="animal_map-address" id="id_animal_map-address" class="form-control" type="select" value="a">
+              <option value="a">서울특별시</option>
+              <option value="b">경기도</option>
+              <option value="c">강원도</option>
+              <option value="d">충청북도</option>
+              <option value="e">충청남도</option>
+              <option value="f">경상북도</option>
+              <option value="g">경상남도</option>
+              <option value="h">전라북도</option>
+              <option value="i">전라남도</option>
+              <option value="j">제주도</option>
+              <option value="k">북한</option>
+            </select>
+        </div>
+          <br><label style="color: #669966; font-size: 125%;"><b>발견 정보</b></label><br>
+        <div class="form-group " style="text-align: left;">
+          <label for="id_animal_map-observed_date"><b>발견 날짜</b><b style="color:red;">*</b></label>
+          <input name="animal_map-observed_date" id="id_animal_map-observed_date" class="form-control" type="date" required>
+        </div>
+                <div class="form-group " style="text-align: left;">
+          <label for="id_animal_map-content"><b>세부내용</b></label>
+          <input name="animal_map-content" id="id_animal_map-content" class="form-control" type="" placeholder="세부내용. .">
+        </div>
+
+        {% endif %}
+           <div class="visible-lg-block">
+        <div class="form-actions">
+          <button class="btn btn-primary btn-large" type="button" onclick="form_submit()" style="background-color: #669966; border-color: #669966; width: 100%;">저장하기</button>
+        </div>
+           </div>
+    </div>
+       <!--오른쪽-->
+       <div style="margin-top: 0px; margin-left: 0%;">
+       {% if request.user.profile.professional %}
+       <br><label style="color: #669966; font-size: 125%;"><b>위치 정보</b></label><br>
+        <label style="color: #669966; font-size: 100%;"><b>Tip: 구글 지도에서 위치를 클릭하면 위도/경도가 기록됩니다.</b></label><br>
+        <div class="form-group " style="text-align: left; width: 55%;">
+          <label for="id_animal_map-Latitude" style="width: 50%;"><b>위도</b><b style="color:red;">*</b></label>
+            <label for="id_animal_map-Longitude" style="width: 50%; float: right;"><b>경도</b><b style="color:red;">*</b></label>
+          <input name="animal_map-Latitude" id="id_animal_map-Latitude" class="form-control" type="text" placeholder="위도. ." style="width: 50%; display: inline; ">
+            <input name="animal_map-Longitude" id="id_animal_map-Longitude" class="form-control" type="text" placeholder="경도. ." style="width: 50%; display: inline; float: right;">
+        </div>
+       {% else %}
+              <br><label style="color: #669966; font-size: 125%;"><b>위치 정보</b></label><br>
+        <label style="color: #669966; font-size: 80%;"><b>Tip: 지도에서 위치를 클릭하면 위도/경도가 기록됩니다.</b></label><br>
+        <div class="form-group " style="text-align: left; width: 100%; padding: 0px;">
+          <label for="id_animal_map-Latitude" style="width: 50%;"><b>위도</b></label>
+            <label for="id_animal_map-Longitude" style="width: 50%; float: right;"><b>경도</b></label>
+          <input name="animal_map-Latitude" id="id_animal_map-Latitude" class="form-control" type="text" placeholder="위도. ." style="width: 50%; display: inline; ">
+            <input name="animal_map-Longitude" id="id_animal_map-Longitude" class="form-control" type="text" placeholder="경도. ." style="width: 50%; display: inline; float: right;">
+        </div>
+       {% endif %}
+    <body onload="initialize()">
+      <!--구글 맵이 나오는 곳-->
+<!--      <input id="pac-input" class="controls" type="text" placeholder="위치 검색">-->
+      <div id="map_canvas" style="margin-top: 20px;"></div>
+      <!--구글 맵이 나오는 곳 end-->
+
+      <div id="info">
+        <div id="mainControl">
+          <div id="waveform"></div>
+          <div id="controlBar">
+            <div class="control_bar_row">
+              <div id="curTime" class="time-indicator">00:00:00</div>
+              <div class="time-indicator-divider">/</div>
+              <div id="fullTime" class="time-indicator">00:00:00</div>
+              <button id="play" class="video-play"  type="button"></button>
+              <button id="stop" class="video-stop" type="button"></button>
+            </div>
+            <div class="control_bar_row">
+
+            </div>
+          </div>
+        </div>
+
+        <div id="addControl"></div>
+      </div>
+    </body>
+  </div>
+       <div class="hidden-lg">
+       <div class="form-actions">
+          <button class="btn btn-primary btn-large" type="button" onclick="form_submit()" style="background-color: #339933; border-color: #339933; width: 100%;">저장하기</button>
+        </div>
+       </div>
+   </div>
+
+        </form>
+</div>
+<footer style="background: #ecf0f1">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+          <ul class="list-inline text-center">
+            <li class="list-inline-item">
+              <a href="#">
+                <span class="fa-stack fa-lg">
+                  <i class="fas fa-circle fa-stack-2x"></i>
+                  <i class="fab fa-twitter fa-stack-1x fa-inverse"></i>
+                </span>
+              </a>
+            </li>
+            <li class="list-inline-item">
+              <a href="#">
+                <span class="fa-stack fa-lg">
+                  <i class="fas fa-circle fa-stack-2x"></i>
+                  <i class="fab fa-facebook-f fa-stack-1x fa-inverse"></i>
+                </span>
+              </a>
+            </li>
+            <li class="list-inline-item">
+              <a href="#">
+                <span class="fa-stack fa-lg">
+                  <i class="fas fa-circle fa-stack-2x"></i>
+                  <i class="fab fa-github fa-stack-1x fa-inverse"></i>
+                </span>
+              </a>
+            </li>
+          </ul>
+          <p class="copyright text-muted" style="text-align: center;">Copyright &copy; Animal Sound Analysis 2019</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+<style type="text/css">
+
+
+#map_canvas { height:400px; width:100%; }
+
+#id_file{ background-color: #FFFFFF; }
+
+.div_wrap {
+width:100%;
+margin:0px auto;
+padding:0px;
+overflow:hidden;
+text-align: center;
+}
+
+.content{
+width:90%;
+height:90%;
+margin:24px auto;
+padding:0px;
+overflow:hidden;
+text-align:center;
+}
+
+.content:after {content:""; clear:both; display:block;}
+
+.content > div {
+float:left;
+color:black;
+width:40%;
+height:100%;
+padding: 10px;
+text-align: center;
+box-sizing:border-box;
+}
+
+
+.btn.btn-primary.btn-large {
+margin-top: 10px;
+width:60%;
+height:60px;
+font-size: 30px;
+}
+
+#id_content{
+height:100px;
+}
+
+#pac-input {
+background-color: #fff;
+font-family: Roboto;
+font-size: 15px;
+font-weight: 300;
+margin-left: 12px;
+padding: 0 11px 0 13px;
+text-overflow: ellipsis;
+width: 400px;
+height: 30px;
+}
+
+#info { height:50%; width:100%; }
+
+#mainControl {
+/*
+width: 45%;
+height: 100%;
+
+
+*/
+margin-right: 30px;
+float: left;
+}
+#addControl {
+
+width: 45%;
+height: 100%;
+
+float: left;
+}
+
+#sound_dropbox {
+display: inline-block;
+width: 100%;
+height: 100%;
+border: 0px solid #3C2F2E;
+-moz-border-radius: 15px;
+margin: 0;
+}
+
+#controlBar {
+margin-top: 30px;
+}
+
+.control_bar_row {
+margin: 20px 0 20px 0;
+}
+
+.range-bar-control {
+margin: 20px 0 20px 0;
+}
+
+
+.video-play {
+width:26px;
+height:26px;
+background-image: url("{% static 'img/play-26.png' %}");
+}
+
+.video-stop {
+width:26px;
+height:26px;
+background: url("{% static 'img/stop-26.png' %}");
+}
+
+.ui-slider .ui-slider-handle{
+background: url("{% static 'img/stop-26.png' %}");
+}
+
+.indicator-container {
+display: inline-block;
+position: absolute;
+}
+
+.indicator {
+z-index:3;
+height:100%;
+width:3px;
+background-color:#999;
+position:absolute;
+display:inline-block;
+left:0%;
+}
+
+.indicator-rec {
+z-index:2;
+height:100%;
+width:100%;
+background-color: #ffffff;
+position:absolute;
+opacity: 0;
+display:none;
+left:0%;
+opacity: 0.3;
+}
+
+.indicator-rec-back {
+background-color: #000000;
+}
+
+.indicator-end{
+left:100%;
+}
+
+.time-indicator{
+/* width:55px;*/
+margin: 0 10px 0 10px;
+display: inline-block;
+}
+
+.time-indicator-divider{
+width:5px;
+text-align: center;
+display: inline-block;
+}
+
+#loading {
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  position: fixed;
+  display: block;
+  opacity: 0.8;
+  background: white;
+  z-index: 99;
+  text-align: center;
+}
+
+#loading > img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 100;
+}
+.content{
+    margin-left: 15%;
+}
+@media only screen and (max-width: 1200px) {
+
+html{font-size:10px;}
+div .content{font-size:2.4em;}
+p{font-size:1.1em;}
+.form-control{
+font-size: 1.2em;
+    height: auto;
+}
+    .content{
+        margin-left: auto;
+    }
+    .content > div{
+        width: auto;
+        float: none;
+    }
+    #addControl{
+    width: 100%;
+float: left;
+}
+#mainControl {
+
+float: none;
+}
+.video-stop,.video-play{
+width: 1.2em;
+    height: 1.2em;
+    background-size: cover;
+}
+}
+
+
+</style>
+<script  src="http://code.jquery.com/jquery-latest.min.js"></script>
+<!-- Google Maps Library load -->
+<!--<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDWV0tlx-1gtFEIJPEdpIFWdGGghKB34xk&libraries=places&callback=initMap" async defer></script>-->
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=4d099ffcf80745413cb9e87556bf5975"></script>
+
+<!--카카오맵-->
+<script>
+    var centerlat=37.58098;
+    var centerlng=127.01487;
+    var container = document.getElementById('map_canvas'); //지도를 담을 영역의 DOM 레퍼런스
+        document.getElementById("id_animal_map-Latitude").value=centerlat;
+    document.getElementById("id_animal_map-Longitude").value=centerlng;
+    var options = { //지도를 생성할 때 필요한 기본 옵션
+        center: new kakao.maps.LatLng(centerlat, centerlng), //지도의 중심좌표.
+        level: 4 //지도의 레벨(확대, 축소 정도)
+    };
+    var map = new kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
+    var markerPosition  = new kakao.maps.LatLng(centerlat, centerlng);
+    var marker = new kakao.maps.Marker({
+        position: markerPosition
+    });
+
+    var marker = new kakao.maps.Marker({
+        // 지도 중심좌표에 마커를 생성합니다
+        position: map.getCenter()
+    });
+    // 지도에 마커를 표시합니다
+    marker.setMap(map);
+
+    kakao.maps.event.addListener(map, 'click', function(mouseEvent) {
+
+        // 클릭한 위도, 경도 정보를 가져옵니다
+        var latlng = mouseEvent.latLng;
+
+        // 마커 위치를 클릭한 위치로 옮깁니다
+        marker.setPosition(latlng);
+        populateInputs(latlng);
+
+    });
+
+//좌표 선택시 결과 lat,lng 정보 입력.
+function populateInputs(pos) {
+  document.getElementById("id_animal_map-Latitude").value=pos.getLat().toFixed(5)
+  document.getElementById("id_animal_map-Longitude").value=pos.getLng().toFixed(5);
+}
+
+</script>
+
+<!-- WaveSurfer Library load -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/wavesurfer.js/1.4.0/wavesurfer.min.js"></script>
+
+<!-- WebAudioRecoder Library load -->
+
+<script src="{% static 'js/recorder/WebAudioRecorder.min.js' %}"></script>
+<script src="{% static 'js/recorder/WebAudioRecorderWav.min.js' %}"></script>
+
+<!-- Slider Library load -->
+<script src="{% static 'js/slider/jquery-asRange.js' %}"></script>
+<link rel="stylesheet" href="{% static 'js/slider/css/asRange.css' %}">
+
+<!-- Datatimepicker Library load -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
+
+<script>
+
+$(document).ready(function() {
+  $('#loading').hide();
+  $('#mForm').submit(function(){
+    $('#loading').show();
+    return true;
+  });
+});
+
+</script>
+
+<script type="text/javascript">
+    //   var centerlat=37.58098;
+    //   var centerlng=127.01487;
+    // $(function() {
+    //     // Geolocation API에 액세스할 수 있는지를 확인
+    //     if (navigator.geolocation) {
+    //         //위치 정보를 얻기
+    //         navigator.geolocation.getCurrentPosition (function(pos) {
+    //             $('#id_animal_map-Latitude').val(pos.coords.latitude);   // 위도
+    //             $('#id_animal_map-Longitude').val(pos.coords.longitude); // 경도
+    //             centerlat=pos.coords.latitude;
+    //             centerlng=pos.coords.longitude;
+    //         });
+    //     } else {
+    //         alert("이 브라우저에서는 Geolocation이 지원되지 않습니다.")
+    //     }
+    // });
+    //
+    // //구글 맵 관련 스크립트 start
+    // var initialLocation;
+    // var siberia = new google.maps.LatLng(60, 105);
+    // var newyork = new google.maps.LatLng(40.698470, -73.95144);
+    // var browserSupportFlag =  new Boolean();
+    //
+    //
+    // function initialize() {
+    // centerlat=parseFloat(centerlat);
+    // centerlng=parseFloat(centerlng);
+    //   var myLatLng = {lat:centerlat, lng:centerlng};
+    //   var myOptions = {
+    //     zoom: 16,
+    //     center: myLatLng
+    //   };
+    //   var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+    //
+    //   var marker = new google.maps.Marker({
+    //       position: myLatLng,
+    //       map: map,
+    //       title: 'Hello World!'
+    //     });
+    //
+    //
+    //
+    //   myListener = google.maps.event.addListener(map, 'click', function(event) {
+    //     placeMarker(event.latLng);
+    //   });
+    //   google.maps.event.addListener(map, 'drag', function(event) {
+    //     placeMarker(event.latLng);
+    //   });
+    //
+    //   function placeMarker(location) {
+    //     if (marker) {
+    //       marker.setPosition(location);
+    //     } else {
+    //      marker = new google.maps.Marker({
+    //       position: location,
+    //       map: map,
+    //       draggable: true
+    //     });
+    //      google.maps.event.addListener(marker, "drag", function (mEvent) {
+    //       populateInputs(mEvent.latLng);
+    //     });
+    //    }
+    //    populateInputs(location);
+    //  }
+
+    //   //지도내 검색기능 start
+    //   var markers = [];
+    //   var input = document.getElementById('pac-input');
+    //   var searchBox = new google.maps.places.SearchBox(input);
+    //   map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+    //
+    //   map.addListener('bounds_changed', function() {
+    //     searchBox.setBounds(map.getBounds());
+    //   });
+    //   searchBox.addListener('places_changed', function() {
+    //     var places = searchBox.getPlaces();
+    //     if (places.length == 0) {
+    //       return;
+    //     }
+    //
+    //           // Clear out the old markers.
+    //           markers.forEach(function(marker) {
+    //             marker.setMap(null);
+    //           });
+    //           markers = [];
+    //
+    //           // For each place, get the icon, name and location.
+    //           var bounds = new google.maps.LatLngBounds();
+    //           places.forEach(function(place) {
+    //             if (!place.geometry) {
+    //               console.log("Returned place contains no geometry");
+    //               return;
+    //             }
+    //             var icon = {
+    //               url: place.icon,
+    //               size: new google.maps.Size(71, 71),
+    //               origin: new google.maps.Point(0, 0),
+    //               anchor: new google.maps.Point(17, 34),
+    //               scaledSize: new google.maps.Size(25, 25)
+    //             };
+    //
+    //             // Create a marker for each place.
+    //             markers.push(new google.maps.Marker({
+    //               map: map,
+    //               icon: icon,
+    //               title: place.name,
+    //               position: place.geometry.location
+    //             }));
+    //
+    //             if (place.geometry.viewport) {
+    //               // Only geocodes have viewport.
+    //               bounds.union(place.geometry.viewport);
+    //             } else {
+    //               bounds.extend(place.geometry.location);
+    //             }
+    //           });
+    //           map.fitBounds(bounds);
+    //         });
+    //   //지도내 검색기능 end
+    // }
+    //구글 맵 관련 스크립트 end
+    //이미지,사운드 파일 확장자 고정.
+    document.getElementById("id_animal_map-imagefile").accept=".jpg,.png,.gif";
+    document.getElementById("id_animal_map-soundfile").accept="audio/*";
+
+</script>
+
+<script type="text/javascript">
+  /* 오디오 파일 관련 스크립트 start */
+  
+  // 미리 지정한 색
+  var predefinedColor = ["#7ebdcb", "#47C83E", "#FF0000", "#4641D9", "#FFBB00", "#000000"];
+  // 범위 지정 바의 수
+  var num = 0;
+  // 전역 Wavesurfer
+  var globalWavesurfer = null;
+
+  // 남은 시간을 디스플레이하기 위한 텍스트 처리 함수
+  // duration: 초
+  // "00:00:00"와 같은 시분초 텍스트 형태로 반환
+  function durationParsing(duration){
+    var hours = Math.floor(duration / 3600);
+    duration %= 3600;
+    var minutes = Math.floor(duration / 60);
+    var seconds = Math.floor(duration % 60);
+    var txt = ("0" + hours).slice(-2) + ":" + ("0" + minutes).slice(-2) + ":" + ("0" + seconds).slice(-2);
+    return txt;
+  }
+
+  // WaveSurfer 설정 함수
+  // containerSelector: 웨이브폼 표시하는 공간
+  // file: 오디오/비디오 파일
+  // 설정된 Wavesurfer 반환
+  function setWaveSurfer(containerSelector, file){
+    var wavesurfer = WaveSurfer.create({
+      container: containerSelector,
+      waveColor: 'violet',
+      progressColor: 'purple'
+    });
+    wavesurfer.loadBlob(file);
+    globalWavesurfer = wavesurfer;
+    return wavesurfer;
+  }
+
+  // 파일이 오디오 혹은 비디오인지 체크
+  function checkFileType(file){
+    var videoType = /video.*/;
+    var audioType = /audio.*/;
+    var isVideoType = false;
+    var isAudioType = false;
+
+    if(file.type.match(videoType)){
+      isVideoType = true;
+    }
+    else if(file.type.match(audioType)){
+      isAudioType = true;
+    }
+
+    var status = {
+      isVideo : isVideoType,
+      isAudio : isAudioType
+    }
+
+    return status;
+  }
+
+  // 드래그앤드롭 및 input file 이벤트 처리 함수
+  // isDrop: 드래그앤드랍 이벤트 여부
+  function getFile(object, isDrop){
+    var file = null;
+    if(isDrop){
+      var transfer = object.dataTransfer || object.originalEvent.dataTransfer;
+      file = transfer.files[0];
+    }else{
+      file = object.files[0];
+    }
+    return file;
+  }
+
+  // Wavesurfer 메인 컨트롤 함수
+  // Wavesurfer의 기본 이벤트 설정
+  function setInitMainPlayer(wavesurfer){
+    // Play 버튼, Pause 버튼 이벤트 설정
+    $("#play").on("click", function(){
+      wavesurfer.playPause();
+      if(wavesurfer.isPlaying()==true){
+        $(this).css("background", 'url("{% static 'img/pause-26.png' %}")');
+      }else{
+        $(this).css("background", 'url("{% static 'img/play-26.png' %}")');
+      }
+    });
+
+    // 전체 길이 표기
+    var dur = wavesurfer.getDuration();
+    var durText = durationParsing(dur);
+    $("#fullTime").text(durText);
+
+    // Stop 버튼 이벤트 설정
+    $("#stop").on("click", function(){
+      wavesurfer.stop();
+    });
+  }
+
+  // Wavesurfer 현재 재생 시간 표기 이벤트
+  function playingEvent(wavesurfer){
+    wavesurfer.on("audioprocess", function () {
+      $("#curTime").text(durationParsing(wavesurfer.getCurrentTime()));
+    });
+  }
+
+  // 범위 지정 표기 레이아웃 함수
+  // rangeBar: 범위 지정 표시 레이아웃을 컨트롤하는 바
+  // number: 컨트롤 바의 넘버
+  function prepareIndicator(rangeBar, number){
+    // 레이아웃 컨테이너 생성 및 설정
+    var indicatorContainer = $("<div id='indicator-container" + number + "' class='indicator-container'></div>");
+    indicatorContainer.appendTo($("#waveform"));
+    indicatorContainer.css("width", $("#waveform").css("width"));
+    var h = $("#waveform").css("height");
+    indicatorContainer.css("height", h);
+    var w = $("#waveform").css("width");
+    var w1 = Number(w.replace("px", "")) / 2;
+    var w2 = String(w1);
+    indicatorContainer.css("margin-left", "-" + w2 + "px");
+    indicatorContainer.css("margin-top", "-" + h);
+
+    // 세부 레이아웃 설정
+    var node = $("<div id='indicator-rec" + number + "' class='indicator-rec'></div>");
+    node.appendTo(indicatorContainer);
+    node = $("<div id='indicator-rec-left" + number + "' class='indicator-rec indicator-rec-back'></div>");
+    node.appendTo(indicatorContainer);
+    node = $("<div id='indicator-rec-right" + number + "' class='indicator-rec indicator-rec-back'></div>");
+    node.appendTo(indicatorContainer);
+    node = $("<div id='indicator-start"  + number + "' class='indicator indicator-start'></div>");
+    node.appendTo(indicatorContainer);
+    node = $("<div id='indicator-end"  + number + "' class='indicator indicator-end'></div>");
+    node.appendTo(indicatorContainer);
+
+    $("#indicator-container"+number+" .indicator").css("background-color", predefinedColor[number]);
+    $("#indicator-container"+number+" .indicator").css("background-color", predefinedColor[number]);
+  }
+
+  // 범위 바 레이아웃 함수
+  // number: 컨트롤 바의 넘버
+  function setRangeBar(wavesurfer, number){
+    // 컨트롤 바 컨테이너 생성
+    var container = $("<div id='range-bar-container" + number + "' class='range-bar-container'></div>");
+    var rangeBar = $("<div id='range-bar" + number + "' class='range-bar'></div>");
+    var rangeBarControl = $("<div id='range-bar-control" + number + "' class='range-bar-control'></div>");
+    container.appendTo($("#addControl"));
+    rangeBar.appendTo(container);
+    rangeBarControl.appendTo(container);
+
+
+    // 세부 레이아웃 설정
+    var duration = wavesurfer.getDuration();
+
+    var startTime = $("<div id='startTime" + number + "' class='time-indicator'>00:00:00</div>");
+    var divider = $("<div class='time-indicator-divider'>/</div>");
+    var endTime = $("<div id='endTime" + number + "' class='time-indicator'>"+durationParsing(duration)+"</div>");
+    var playButton = $("<button id='play" + number + "' class='video-play'></button>");
+    var stopButton = $("<button id='stop" + number + "' class='video-stop'></button>");
+    var extractButton = $("<button id='extraction-button" + number + "' class='extraction-button'>extract</button>");
+    var inputName = $("<input id='input-name" + number + "' class='input-name' type='text'/>");
+
+    startTime.appendTo(rangeBarControl);
+    divider.appendTo(rangeBarControl);
+    endTime.appendTo(rangeBarControl);
+    //playButton.appendTo(rangeBarControl);
+    //stopButton.appendTo(rangeBarControl);
+    //extractButton.appendTo(rangeBarControl);
+    //inputName.appendTo(rangeBarControl);
+
+    // 컨트롤 바 설정
+    rangeBar.asRange({
+      range: true,
+      step: 0.01,
+      min: 0,
+      max: duration,
+      limit: false,
+      tip: false,
+    });
+    rangeBar.asRange('set', [0, duration]);
+    rangeBar.css("width", "100%");
+
+    $("#range-bar"+number+" .asRange-selected").css("background-color", predefinedColor[number]);
+    $("#styleDiv").append("<style>#range-bar"+number+" .asRange-pointer:before {background:"+ predefinedColor[number]+";border: 1px solid #ffffff;}</style>");
+
+    // 컨트롤 바와 상응하는 범위 지정 표기 레이아웃 생성
+    prepareIndicator(rangeBar, number);
+
+    // 추출 버튼 이벤트 설정
+    extractButton.on("click", function(e){
+      var idNumber = e.target.id[-1];
+      extractAudio(wavesurfer, number);
+    });
+  }
+
+  // 범위 바-표시 레이아웃 연동 이벤트 처리 함수
+  // 바를 움직이면 레이아웃을 변화
+  // number: 컨트롤 바의 넘버
+  function setRangeBarEvent(number){
+    // 변화 이벤트
+    $("#range-bar"+number).on('asRange::change', function(event){
+      var value = $("#range-bar"+number).asRange('get');
+      var minValue = value[0];
+      var maxValue = value[1];
+      var minText = durationParsing(minValue);
+      var maxText = durationParsing(maxValue);
+      $("#startTime"+number).text(minText);
+      $("#endTime"+number).text(maxText);
+
+      var totalWidth = $("#range-bar"+number).css('width');
+      totalWidth = totalWidth.slice(0, totalWidth.length-2);
+      var curLocation1 = $("#range-bar"+number+" .asRange-pointer-1").css('left');
+      var curLocation2 = $("#range-bar"+number+" .asRange-pointer-2").css('left');
+      curLocation1 = curLocation1.slice(0, curLocation1.length-2);
+      curLocation2 = curLocation2.slice(0, curLocation2.length-2);
+
+      var percentage1 = 100 * (curLocation1 / totalWidth);
+      var percentage2 = 100 * (curLocation2 / totalWidth);
+
+      $("#indicator-start"+number).css("left",percentage1+"%");
+      $("#indicator-end"+number).css("left",percentage2+"%");
+
+      var wid = curLocation2 - curLocation1;
+      $("#indicator-rec"+number).css({"left": percentage1+"%", "width":wid+"px", "display":"inline-block"});
+      $("#indicator-rec-left"+number).css({"width":curLocation1+"px","display":"inline-block"});
+      wid = totalWidth-curLocation2;
+      $("#indicator-rec-right"+number).css({"width":wid+"px","left": percentage2+"%","display":"inline-block"});
+    });
+
+    // 변화 종료 이벤트
+    $("#range-bar"+number).on('asRange::moveEnd', function(event){
+      $("#indicator-rec"+number).css("display", "none");
+      $("#indicator-rec-left"+number).css("display", "none");
+      $("#indicator-rec-right"+number).css("display", "none");
+    });
+  }
+
+  // 부분 재생 함수
+  // number: 컨트롤 바의 넘버
+  function setClipPlayStopEvent(wavesurfer, number){
+    // 부분 재생 및 일시 정지
+    $("#play"+number).on('click', function(event){
+      if(!wavesurfer.isPlaying()){
+        var totalWidth = $("#range-bar"+number).css('width');
+        totalWidth = totalWidth.slice(0, totalWidth.length-2);
+        var duration = wavesurfer.getDuration();
+        var curLocation1 = $("#range-bar"+number+" .asRange-pointer-1").css('left');
+        var curLocation2 = $("#range-bar"+number+" .asRange-pointer-2").css('left');
+        curLocation1 = curLocation1.slice(0, curLocation1.length-2);
+        curLocation2 = curLocation2.slice(0, curLocation2.length-2);
+        var loc1 = duration * (curLocation1 / totalWidth);
+        var loc2 = duration * (curLocation2 / totalWidth);
+        wavesurfer.play(loc1, loc2);
+        $(this).css("background", 'url("{% static 'img/pause-26.png' %}")');
+      }else{
+        wavesurfer.pause();
+        $(this).css("background", 'url("{% static 'img/play-26.png' %}")');
+      }
+    });
+
+    // 정지 이벤트
+    $("#stop"+number).on("click", function(){
+      wavesurfer.stop();
+    });
+  }
+
+  // 파일 메타데이터 불러오는 함수
+  // file: 대상 파일
+  function getFileMeta(file, wavesurfer){
+    var fileSize = file.size || file.fileSize;
+    var fileName = file.name;
+    var splitTokens = fileName.split(".");
+    var fileEx = splitTokens[splitTokens.length-1];
+    var duration = wavesurfer.getDuration();
+
+
+    var forms = $('#mForm');
+    var fileSizeInput = $("<input id='file_size_input' name='file_size_input' type='text' value='" + fileSize + "' hidden>");
+    fileSizeInput.appendTo(forms);
+
+    var fileNameInput = $("<input id='file_name_input' name='file_name_input' type='hidden' value='" + fileName + "' hidden>");
+    fileNameInput.appendTo(forms);
+
+    var fileExInput = $("<input id='file_ex_input' name='file_ex_input' type='hidden' value='" + fileEx + "' hidden>");
+    fileExInput.appendTo(forms);
+
+    var durationInput = $("<input id='duration_input' name='duration_input' type='hidden' value='" + duration + "' hidden>");
+    durationInput.appendTo(forms);
+
+  }
+
+  // 서브 파일 메타데이터 불러오는 함수
+  // file: 대상 파일
+  function getSubFileMeta(file, num){
+    var fileSize = file.size || file.fileSize;
+    var fileName = file.name;
+    var splitTokens = fileName.split(".");
+    //var fileEx = splitTokens[splitTokens.length-1];
+    var fileEx = 'wav';
+
+    var totalWidth = $("#range-bar"+num).css('width');
+    totalWidth = totalWidth.slice(0, totalWidth.length-2);
+    var duration = globalWavesurfer.getDuration();
+    var curLocation1 = $("#range-bar"+num+" .asRange-pointer-1").css('left');
+    var curLocation2 = $("#range-bar"+num+" .asRange-pointer-2").css('left');
+    curLocation1 = curLocation1.slice(0, curLocation1.length-2);
+    curLocation2 = curLocation2.slice(0, curLocation2.length-2);
+    var loc1 = duration * (curLocation1 / totalWidth);
+    var loc2 = duration * (curLocation2 / totalWidth);
+    diff_loc = Number(loc2) - Number(loc1);
+    var return_array = new Array();
+    return_array[0] = fileSize;
+    return_array[1] = fileName + "." + fileEx;
+    return_array[2] = fileEx;
+    return_array[3] = loc1;
+    return_array[4] = loc2;
+    return_array[5] = diff_loc;
+    return return_array;
+
+  }
+
+  // 파일 등록 이벤트 함수
+  // 아직 삭제 이벤트는 추가하지 않음!
+  // file: 대상 파일
+  function addFileIcon(file){
+    var fileInfoDiv = document.createElement("div");
+    fileInfoDiv.style="font-size: small";
+    var fileIconDiv = document.createElement("img");
+    fileIconDiv.src = "{% static 'img/video-file-48.png' %}";
+    fileIconDiv.style= "width: auto";
+    var fileNameDiv = document.createElement("div");
+    fileNameDiv.innerHTML = file.name;
+    var fileDeleteDiv = document.createElement("img");
+    fileDeleteDiv.src = "{% static 'img/delete-26.png' %}";
+    fileDeleteDiv.style= "width: auto";
+    fileInfoDiv.appendChild(fileIconDiv);
+    fileInfoDiv.appendChild(fileNameDiv);
+    fileInfoDiv.appendChild(fileDeleteDiv);
+    var uploadedList = document.getElementById("sound_dropbox");
+    uploadedList.appendChild(fileInfoDiv);
+  }
+
+  // 파일 업로드 시도 처리 함수
+  // file: 대상 파일
+  function fileProcess(file){
+    var fileType = checkFileType(file);
+    var isVideo = fileType.isVideo;
+    var isAudio = fileType.isAudio;
+
+    var reader = new FileReader();
+
+    // 파일 읽어올 경우 이벤트 처리
+    reader.onload=function(e){
+      // Wavesurfer 설정
+      var wavesurfer = setWaveSurfer('#waveform', file);
+
+      // Waversurfer가 준비되면 차례대로 처리
+      wavesurfer.on('ready', function(){
+
+        setInitMainPlayer(wavesurfer);
+        playingEvent(wavesurfer);
+
+        setRangeBar(wavesurfer, num);
+        setRangeBarEvent(num);
+        setClipPlayStopEvent(wavesurfer, num);
+        num += 1;
+
+        // 범위 지정 바 추가
+          /**/
+        $("#add-button").on('click', function(event){
+          setRangeBar(wavesurfer, num);
+          setRangeBarEvent(num);
+          setClipPlayStopEvent(wavesurfer, num);
+          num += 1;
+        });
+
+        getFileMeta(file, wavesurfer);
+      });
+
+      addFileIcon(file);
+    }
+
+    // 비디오나 오디오일 경우 파일 읽어옴
+    if(isVideo || isAudio){
+      reader.readAsArrayBuffer(file);
+    }
+  }
+
+  // 오디오 부분 추출 함수
+  // number: 컨트롤 바의 넘버
+  function extractAudio(wavesurfer, number){
+    var strStartTime = $("#startTime"+number).text();
+    var strEndTime = $("#endTime"+number).text();
+
+    // 범위 찾음
+    var strStartTimeTokens = strStartTime.split(":");
+    var hourInSec = 3600 * parseInt(strStartTimeTokens[0]);
+    var minuteInSec = 60 * parseInt(strStartTimeTokens[1]);
+    var sec = parseInt(strStartTimeTokens[2]);
+    var totalStartSec = hourInSec + minuteInSec + sec;
+
+    var strEndTimeTokens = strEndTime.split(":");
+    hourInSec = 3600 * parseInt(strEndTimeTokens[0]);
+    minuteInSec = 60 * parseInt(strEndTimeTokens[1]);
+    sec = parseInt(strEndTimeTokens[2]);
+    var totalEndSec = hourInSec + minuteInSec + sec;
+
+    // 버퍼로 긁어옴
+    var originalBuffer = wavesurfer.backend.buffer;
+    var segmentDuration = totalEndSec - totalStartSec;
+    var startPosition = totalStartSec * originalBuffer.sampleRate;
+
+    var audioCtx = new (window.AudioContext|| window.webkitAudioContext)();
+
+    var emptySegment = audioCtx.createBuffer(
+      originalBuffer.numberOfChannels,
+      segmentDuration * originalBuffer.sampleRate,
+      originalBuffer.sampleRate
+      );
+    for (var i = 0; i < originalBuffer.numberOfChannels; i++) {
+      var chanData = originalBuffer.getChannelData(i);
+      var segmentChanData = emptySegment.getChannelData(i);
+      for (var j = 0, len = chanData.length; j < len; j++) {
+        segmentChanData[j] = chanData[j+startPosition];
+      }
+    }
+    var newBuffer = []
+    for (var i = 0; i < originalBuffer.numberOfChannels; i++) {
+      newBuffer.push(emptySegment.getChannelData(i));
+    }
+
+    var source = audioCtx.createBufferSource();
+    source.buffer = emptySegment;
+    source.connect(audioCtx.destination);
+
+    // blob 형태로 저장
+    var encoder = new WavAudioEncoder(originalBuffer.sampleRate, originalBuffer.numberOfChannels);
+    encoder.encode(newBuffer);
+    var blob = encoder.finish();
+
+    var html, time, url;
+    time = new Date();
+    url = URL.createObjectURL(blob);
+
+    // 접근 링크 보이기
+    var hf = document.createElement('a');
+    hf.href = url;
+    hf.style.backgroundColor = "black";
+    hf.download = new Date().toISOString() + '.wav';
+    hf.innerHTML = hf.download;
+    document.getElementById("range-bar-container"+number).appendChild(hf);
+  }
+
+  // 업로드용 오디오 부분 추출 함수
+  function extractAudioForUp(wavesurfer, number){
+    var strStartTime = $("#startTime"+number).text();
+    var strEndTime = $("#endTime"+number).text();
+
+    var strStartTimeTokens = strStartTime.split(":");
+    var hourInSec = 3600 * parseInt(strStartTimeTokens[0]);
+    var minuteInSec = 60 * parseInt(strStartTimeTokens[1]);
+    var sec = parseInt(strStartTimeTokens[2]);
+    var totalStartSec = hourInSec + minuteInSec + sec;
+
+    var strEndTimeTokens = strEndTime.split(":");
+    hourInSec = 3600 * parseInt(strEndTimeTokens[0]);
+    minuteInSec = 60 * parseInt(strEndTimeTokens[1]);
+    sec = parseInt(strEndTimeTokens[2]);
+    var totalEndSec = hourInSec + minuteInSec + sec;
+
+    var originalBuffer = wavesurfer.backend.buffer;
+    var segmentDuration = totalEndSec - totalStartSec;
+    var startPosition = totalStartSec * originalBuffer.sampleRate;
+
+    var audioCtx = new (window.AudioContext|| window.webkitAudioContext)();
+
+    var emptySegment = audioCtx.createBuffer(
+      originalBuffer.numberOfChannels,
+      segmentDuration * originalBuffer.sampleRate,
+      originalBuffer.sampleRate
+      );
+    for (var i = 0; i < originalBuffer.numberOfChannels; i++) {
+      var chanData = originalBuffer.getChannelData(i);
+      var segmentChanData = emptySegment.getChannelData(i);
+      for (var j = 0, len = chanData.length; j < len; j++) {
+        segmentChanData[j] = chanData[j+startPosition];
+      }
+    }
+    var newBuffer = []
+    for (var i = 0; i < originalBuffer.numberOfChannels; i++) {
+      newBuffer.push(emptySegment.getChannelData(i));
+    }
+
+    var source = audioCtx.createBufferSource();
+    source.buffer = emptySegment;
+    source.connect(audioCtx.destination);
+
+    var encoder = new WavAudioEncoder(originalBuffer.sampleRate, originalBuffer.numberOfChannels);
+    encoder.encode(newBuffer);
+    var blob = encoder.finish();
+
+    var file = new File([blob], "subFile" + number+'.wav');
+    return file;
+  }
+
+  // 이벤트 설정
+  $(document).ready(function(){
+
+    $("#id_animal_map-soundfile").on("change", function(){
+      var file = getFile(this, false);
+
+      fileProcess(file);
+    });
+
+    $("#sound_dropbox").on("dragover", false).on("drop", function (event){
+      event.stopPropagation();
+      event.preventDefault();
+      console.log("ondrop");
+      var file = getFile(event, true);
+
+      fileProcess(file);
+    });
+  });
+
+  function form_submit(){
+      // document.getElementById('form-control').value;
+      var fileCheck_soundfile = document.getElementById("id_animal_map-soundfile").value;
+      var fileCheck_imagefile = document.getElementById("id_animal_map-imagefile").value;
+      var fileCheck_title = document.getElementById("id_animal_map-title").value;
+
+      if(!fileCheck_soundfile){
+          console.log('없어');
+          alert('음성 파일을 넣어주세요.');
+          // document.getElementById("id_animal_map-soundfile").setCustomValidity('dd');
+          return false;
+      }
+      if(!fileCheck_imagefile){
+          console.log('없어');
+          alert('이미지 파일을 넣어주세요.');
+          return false;
+      }
+      if(!fileCheck_title){
+          console.log('없어');
+          alert('종 이름을 넣어주세요.');
+          return false;
+      }
+
+    var myForm = document.getElementById('mForm');
+    var formData = new FormData(myForm);
+    console.log(num)
+    for (var i=0;i<num;i++){
+     var file = extractAudioForUp(globalWavesurfer, i);
+     formData.append('subfile' + i, file);
+     var meta = getSubFileMeta(file, i);
+     var label = $('#input-name' + i).val();
+     meta.push(label);
+     formData.append('subfile_meta' + i, meta);
+    }
+
+    console.log("These are keys");
+
+    for (var key of formData.keys()) {
+       console.log(key);
+    }
+
+    console.log("These are values");
+
+    for (var key of formData.values()) {
+       console.log(key);
+    }
+
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState === xhr.DONE) {
+        if (xhr.status === 200 || xhr.status === 201) {
+          $(location).attr('href', '/')
+        } else {
+        }
+      }
+    };
+    xhr.open('POST', '/animalsave/'); // 메소드와 주소 설정
+    xhr.send(formData); // 요청 전송
+
+  }
+
+  $(function () {
+    $("#form-control").datetimepicker();
+  });
+
+  </script>
+  {% endblock %}

@@ -1,0 +1,577 @@
+<!-- templates/home.html-->
+<!--맨 위 커버 -->
+{% extends 'base.html' %}
+
+<!-- 페이지 이름 -->
+{% block title %}동물 소리(animal_sound){% endblock %}
+
+{% block content %}
+
+<script>
+
+
+    // $( document ).ready( function() {
+    //     $( 'button.select' ).click( function() {
+    //          var con = document.getElementById("box2");
+    //         if(con.style.display=='block'){
+    //             con.style.display = 'none';
+    //         }else {
+    //             con.style.display = 'block';
+    //         }
+    //     } );
+    // } );
+
+</script>
+<style>
+    ::-webkit-scrollbar {
+        width: 8px;
+    }
+    ::-webkit-scrollbar-button {
+        width: 8px;
+        height:5px;
+    }
+    ::-webkit-scrollbar-track {
+        background:#eee;
+        border: thin solid lightgray;
+        box-shadow: 0px 0px 3px #dfdfdf inset;
+        border-radius:10px;
+    }
+    ::-webkit-scrollbar-thumb {
+        background: #609260;
+        border: thin solid gray;
+        border-radius:10px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+        background:#7d7d7d;
+    }
+</style>
+<div class="container-fluid">
+    <!-- 검색 start-->
+    <div id= "pac-text" style="width: 400px; margin-bottom: 30px;background-color: rgba(255,255,255,0.7); ">
+        <div style="margin-left: 4%;margin-right: 2%;text-align: center;padding-top: 10px;"><input id="search_input" type="search", style="width: 70%; font-family: 'Noto Sans KR', sans-serif;" placeholder="동물, 위치, 기타..."/>
+            <button id="search_button" type="submit"class="btn btn-primary" style=" background-color: #669966; width: 10%;"><i class="fa fa-search"></i><img src="/media/iconfinder_Search_984754.png" style="height: 16px;"></button>
+            <button id="reload_button" type="submit"class="btn btn-primary" style=" background-color: #669966; width: 10%;"><i class="fa fa-search"></i><img src="/media/reload.png" style="height: 16px;"></button></div>
+
+        <!--       <div style="text-align: center;"> <button class="select" style="background-color: #669966;font-size: 22px; font-family: 'Noto Sans KR', sans-serif; border-radius: 5px;color: #FFFFFF" >상세검색</button></div>-->
+        <div id="box2" style="display: block;margin-left: 2%;margin-right: 2%;">
+            <p style="padding-left: 5%;"><b>동물 구분</b></p>
+            <div class="" data-toggle="buttons" style="width: 100%; text-align: center;">
+                <label class="btn btn-primary" id="class_all" style=" border-color: transparent; margin-bottom: 2px; width: 30%;">
+                    <input type="checkbox" name="checkbox" id="class1"  value="" autocomplete="off"> <p style="color:#fff"> 전체</p>
+                </label>
+                <label class="btn btn-primary" id="class_m" style=" border-color: transparent; margin-bottom: 2px; width: 30%;">
+                    <input type="checkbox" name="checkbox" id="class2" autocomplete="off" value="m" id="cd2" > <p style="color:#fff">포유류</p>
+                </label>
+                <label class="btn btn-primary" id="class_b" style=" border-color: transparent; margin-bottom: 2px; width: 30%;">
+                    <input type="checkbox" name="checkbox" id="class3" autocomplete="off" value="b" > <p style="color:#fff">조류</p>
+                </label>
+                <label class="btn btn-primary" id="class_r" style=" border-color: transparent; margin-bottom: 2px; width: 30%;">
+                    <input type="checkbox" name="checkbox" id="class4" autocomplete="off" value="r" > <p style="color:#fff">파충류</p>
+                </label>
+                <label class="btn btn-primary" id="class_a" style=" border-color: transparent; margin-bottom: 2px; width: 30%;">
+                    <input type="checkbox" name="checkbox" id="class5" autocomplete="off" value="a" > <p style="color:#fff">양서류</p>
+                </label>
+                <label class="btn btn-primary" id="class_i" style=" border-color: transparent; margin-bottom: 2px; width: 30%;">
+                    <input type="checkbox" name="checkbox" id="class6"autocomplete="off" value="i" > <p style="color:#fff">곤충</p>
+                </label>
+            </div> <!-- 클레스나 id 값으로 정보 받게 하면 될듯.-->
+
+            <p style="padding-left: 5%;"><b>지역</b></p>
+            <div class="" data-toggle="buttons" style="width: 100%; text-align: center;">
+                <label class="btn btn-primary" id="region_all" style=" border-color: transparent; margin-bottom: 2px; width: 30%;">
+                    <input type="checkbox" name="options" value="" id="option1" autocomplete="off" checked="" > <p style="color:#fff"> 전체</p>
+                </label>
+                <label class="btn btn-primary" id="region_a" style=" border-color: transparent; margin-bottom: 2px; width: 30%;">
+                    <input type="checkbox" name="options" value="a" id="option2" autocomplete="off" ><p style="color:#fff"> 서울시</p>
+                </label>
+                <label class="btn btn-primary" id="region_b" style=" border-color: transparent; margin-bottom: 2px; width: 30%;">
+                    <input type="checkbox" name="options" value="b" id="option3" autocomplete="off" ><p style="color:#fff"> 경기도</p>
+                </label>
+                <label class="btn btn-primary" id="region_c" style=" border-color: transparent; margin-bottom: 2px; width: 30%;">
+                    <input type="checkbox" name="options" value="c" id="option4" autocomplete="off" ><p style="color:#fff">강원도</p>
+                </label>
+                <label class="btn btn-primary" id="region_d" style=" border-color: transparent; margin-bottom: 2px; width: 30%;">
+                    <input type="checkbox" name="options" value="d" id="option5" autocomplete="off" ><p style="color:#fff"> 충청북도</p>
+                </label>
+                <label class="btn btn-primary" id="region_e" style=" border-color: transparent; margin-bottom: 2px; width: 30%;">
+                    <input type="checkbox" name="options" value="e" id="option6" autocomplete="off" ><p style="color:#fff"> 충청남도</p>
+                </label>
+                <label class="btn btn-primary" id="region_f" style=" border-color: transparent; margin-bottom: 2px; width: 30%;">
+                    <input type="checkbox" name="options" value="f" id="option7" autocomplete="off" ><p style="color:#fff"> 경상북도</p>
+                </label>
+                <label class="btn btn-primary" id="region_g" style=" border-color: transparent; margin-bottom: 2px; width: 30%;">
+                    <input type="checkbox" name="options" value="g" id="option8" autocomplete="off" ><p style="color:#fff"> 경상남도</p>
+                </label>
+                <label class="btn btn-primary" id="region_h" style=" border-color: transparent; margin-bottom: 2px; width: 30%;">
+                    <input type="checkbox" name="options" value="h" id="option9" autocomplete="off" ><p style="color:#fff"> 전라북도</p>
+                </label>
+                <label class="btn btn-primary" id="region_i" style=" border-color: transparent; margin-bottom: 2px; width: 30%;">
+                    <input type="checkbox" name="options" value="i" id="option10" autocomplete="off" ><p style="color:#fff"> 전라남도</p>
+                </label>
+                <label class="btn btn-primary" id="region_j" style=" border-color: transparent; margin-bottom: 2px; width: 30%;">
+                    <input type="checkbox" name="options" value="j" id="option11" autocomplete="off" ><p style="color:#fff"> 제주도</p>
+                </label>
+                <label class="btn btn-primary" id="region_k" style=" border-color: transparent; margin-bottom: 2px; width: 30%;">
+                    <input type="checkbox" name="options" value="k" id="option12" autocomplete="off" ><p style="color:#fff"> 이북</p>
+                </label>
+            </div>
+            <div>
+                <p style="padding-left: 5%;"><b>기간</b></p>
+                <div class=""  style="width: 100%; text-align: center; padding-bottom: 20px;">
+                    <input type="date" id="startdate" name="birthday" style="background-color: #669966;color: white;"> ~ <input type="date" id="enddate" style="background-color: #669966;color: white;"> <!-- 클레스나 id 값으로 정보 받게 하면 될듯.-->
+                </div>
+            </div>
+        </div>
+    </div>
+    <div>
+        <p id="title" class="d-flex justify-content-center" style="margin: 0%;"></p>
+    </div>
+</div>
+<!-- 검색 end-->
+<div class="row" style="margin:0px;">
+    <!--지도 start-->
+    <div class="col-lg-12 col-sm-12 col-md-12"  style="padding-right:0px;padding-left:0px;">
+        <!--            <input id="pac-input" class="controls" type="text" placeholder="위치 검색">-->
+        <div id="map" style="height:870px; width: 100%; clear:both; " >  </div>
+    </div>
+    <!--지도 end-->
+    <!--동물 정보 start-->
+    <div class="col-lg-3 col-sm-12 col-md-12" id="input">
+        <div style="overflow-y:scroll; display: inline-block; background-color: rgba(255,255,255,0.7)">
+            <tbody>
+            <div style="width: 350px;height: 800px; margin-bottom: 30px; ">
+                {% for animal_map in animal_maps %}
+                <hr style="margin-top: 0.1rem;margin-bottom:0px;">
+                <div class="text_img" style="width: 20%;height: 100px;display: inline-block;"><img src="/media/{{animal_map.imagefile}}" style="width: 100%; height: 100px;" onerror="this.src='/media/No_image.png'" ></div>
+                <div style="width: 60%;display: inline-block;"><h5><a href="{% url 'animal_detail' pk=animal_map.pk %}" style="color:#000000; "><b>{{ animal_map.title1 }}</b></a></h5>
+                    <p>
+                        발견장소:
+                        {%if animal_map.address == 'a' %}
+                        서울시
+                        {%elif animal_map.address == 'b'%}
+                        경기도
+                        {%elif animal_map.address == 'c'%}
+                        강원도
+                        {%elif animal_map.address == 'd'%}
+                        충청북도
+                        {%elif animal_map.address == 'e'%}
+                        충청남도
+                        {%elif animal_map.address == 'f'%}
+                        경상북도
+                        {%elif animal_map.address == 'g'%}
+                        경상남도
+                        {%elif animal_map.address == 'h'%}
+                        전라북도
+                        {%elif animal_map.address == 'i'%}
+                        전라남도
+                        {%elif animal_map.address == 'j'%}
+                        제주도
+                        {%elif animal_map.address == 'k'%}
+                        이북
+                        {%endif%}
+
+                    </p>
+                    <p> 발견시각:{{animal_map.observed_date}}</p>
+                    <p>구분:<img src="/media/marker_{{ animal_map.animalclass }}.png" style="height: 20px;width: 20px; margin-left: 5px;">
+                        {%if animal_map.animalclass == 'm' %}
+                        포유류
+                        {%elif animal_map.animalclass == 'b'%}
+                        조류
+                        {%elif animal_map.animalclass == 'r'%}
+                        파충류
+                        {%elif animal_map.animalclass == 'a'%}
+                        양서류
+                        {%elif animal_map.animalclass == 'i'%}
+                        곤충
+                        {%endif%}
+                    </p>
+                </div>
+                {% endfor%}
+            </div>
+            </tbody>
+        </div>
+    </div>
+    <!--동물 정보 end-->
+</div>
+</div><!-- container-->
+<footer style="background: #ecf0f1">
+    <div class="container">
+        <div class="row" >
+            <div class="col-lg-8 col-md-10 mx-auto">
+                <p class="copyright text-muted" style="text-align: center;">Copyright &copy; Animal Sound Analysis 2019</p>
+            </div>
+        </div>
+    </div>
+</footer>
+<style type="text/css">
+    p{
+        margin-bottom: 0;
+    }
+    img{
+        vertical-align: bottom;
+    }
+    #pac-input {
+        background-color: #fff;
+        font-family: Roboto;
+        font-size: 15px;
+        font-weight: 300;
+        margin-left: 12px;
+        padding: 0 11px 0 13px;
+        text-overflow: ellipsis;
+        width: 400px;
+        height: 30px;
+    }
+    b,p{
+        font-family: 'Noto Sans KR', sans-serif
+    }
+</style>
+<script>
+    function getParameterByName(name) {
+        name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+        var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+            results = regex.exec(location.search);
+        return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+    }
+    var title =getParameterByName('search_key');
+    document.getElementById('title').innerHTML=title;
+    var map;
+    var centerlat = getParameterByName('centerlat');
+    var centerlng = getParameterByName('centerlng');
+    var centerzoom = getParameterByName('zoom');
+    if (centerlng=='') {
+        centerzoom=910;
+        centerlat=36.08020;
+        centerlng=127.3310;
+    }
+
+
+
+</script>
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=4d099ffcf80745413cb9e87556bf5975"></script>
+<style>
+    .wrap {position: absolute;left: 0;bottom: 40px;width: 288px;height: 132px;margin-left: -144px;text-align: left;overflow: hidden;font-size: 12px;font-family: 'Malgun Gothic', dotum, '돋움', sans-serif;line-height: 1.5;}
+    .wrap * {padding: 0;margin: 0;}
+    .wrap .info {width: 286px;height: 120px;border-radius: 5px;border-bottom: 2px solid #ccc;border-right: 1px solid #ccc;overflow: hidden;background: #fff;}
+    .wrap .info:nth-child(1) {border: 0;box-shadow: 0px 1px 2px #888;}
+    .info .title {padding: 5px 0 0 10px;height: 30px;background: #eee;border-bottom: 1px solid #ddd;font-size: 18px;font-weight: bold;}
+    .info .close {position: absolute;top: 10px;right: 10px;color: #888;width: 17px;height: 17px;background: url('http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/overlay_close.png');}
+    .info .close:hover {cursor: pointer;}
+    .info .body {position: relative;overflow: hidden;}
+    .info .desc {position: relative;margin: 13px 0 0 90px;height: 75px;}
+    .desc .ellipsis {overflow: hidden;text-overflow: ellipsis;white-space: nowrap;}
+    .desc .jibun {font-size: 11px;color: #888;margin-top: -2px;}
+    .info .img {position: absolute;top: 6px;left: 5px;width: 73px;height: 71px;border: 1px solid #ddd;color: #888;overflow: hidden;}
+    .info:after {content: '';position: absolute;margin-left: -12px;left: 50%;bottom: 0;width: 22px;height: 12px;background: url('http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white.png')}
+    .info .link {color: #5085BB;}
+</style>
+<script>
+    var container = document.getElementById('map'); //지도를 담을 영역의 DOM 레퍼런스
+    var options = { //지도를 생성할 때 필요한 기본 옵션
+        center: new kakao.maps.LatLng(parseFloat(centerlat), parseFloat(centerlng)), //지도의 중심좌표.
+        level: 12 //지도의 레벨(확대, 축소 정도)
+    };
+    var map = new kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
+
+
+    {% for animal_map in animal_maps %}
+    {% if animal_map.Latitude is null %}
+    {% else %}
+
+    Latitude = {{ animal_map.Latitude }};
+    Longitude = {{ animal_map.Longitude }};
+    myLatLng = {lat: Latitude, lng: Longitude};
+
+    var imageSrc = '/media/marker_{{ animal_map.animalclass }}.png', // 마커이미지의 주소입니다
+        imageSize = new kakao.maps.Size(12, 12), // 마커이미지의 크기입니다
+        imageOption = {offset: new kakao.maps.Point(5, 0)}; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
+    var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption),
+        markerPosition = new kakao.maps.LatLng(Latitude, Longitude); // 마커가 표시될 위치입니다
+
+    var marker = new kakao.maps.Marker({
+        clickable: true, // 마커를 클릭했을 때 지도의 클릭 이벤트가 발생하지 않도록 설정합니다
+        position: markerPosition,
+        image: markerImage // 마커이미지 설정
+    });
+    marker.setMap(map);
+    var iwContent  = '<div style="padding:5px;"><img src="/media/{{animal_map.imagefile}}" width="10" height="10"> <h1 style="font-size: 18px;margin:0px;">종명: {{ animal_map.title1 }}</h1> {{ animal_map.content }} '+
+        '<a href="{% url 'animal_detail' pk=animal_map.pk %}" style="color:#339933; text-align: right; display: block;">더 보기..</a> <p>작성자: {{ animal_map.writer }}</p></div>';
+
+    // var iwContent = '<div style="padding:5px;">Hello World!</div>', // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
+    iwRemoveable = true; // removeable 속성을 ture 로 설정하면 인포윈도우를 닫을 수 있는 x버튼이 표시됩니다
+
+
+    attachSecretMessage(marker, iwContent)
+
+    {% endif %}
+    {% endfor%}
+    var input = document.getElementById('input');
+    var pactext = document.getElementById('pac-text');
+    map.addControl(input, kakao.maps.ControlPosition.TOPLEFT);
+    map.addControl(pactext, kakao.maps.ControlPosition.TOPRIGHT);
+    function attachSecretMessage(marker, secretMessage) {
+// 인포윈도우를 생성합니다
+        var infowindow = new kakao.maps.InfoWindow({
+            content : iwContent,
+            removable : iwRemoveable
+        });
+
+// 마커에 클릭이벤트를 등록합니다
+        kakao.maps.event.addListener(marker, 'click', function() {
+            // 마커 위에 인포윈도우를 표시합니다
+            infowindow.open(map, marker);
+        });
+    }
+
+
+
+</script>
+<script>
+
+    var class_check = getParameterByName('class_key');
+    var address_check =getParameterByName('address_key');
+
+    if (class_check.indexOf("m") != -1) {
+        $("input:checkbox[id='class2']").prop("checked", true);
+        $("input:checkbox[id='class1']").prop("checked", false);
+    }
+    if (class_check.indexOf("b") != -1) {
+        $("input:checkbox[id='class3']").prop("checked", true);
+        $("input:checkbox[id='class1']").prop("checked", false);
+    }
+    if (class_check.indexOf("r") != -1) {
+        $("input:checkbox[id='class4']").prop("checked", true);
+        $("input:checkbox[id='class1']").prop("checked", false);
+    }
+    if (class_check.indexOf("a") != -1) {
+        $("input:checkbox[id='class5']").prop("checked", true);
+        $("input:checkbox[id='class1']").prop("checked", false);
+    }
+    if (class_check.indexOf("i") != -1) {
+        $("input:checkbox[id='class6']").prop("checked", true);
+        $("input:checkbox[id='class1']").prop("checked", false);
+    }
+
+    if (address_check.indexOf("a") != -1) {
+        $("input:checkbox[id='option2']").prop("checked", true);
+        $("input:checkbox[id='option1']").prop("checked", false);
+    }
+    if (address_check.indexOf("b") != -1) {
+        $("input:checkbox[id='option3']").prop("checked", true);
+        $("input:checkbox[id='option1']").prop("checked", false);
+    }
+    if (address_check.indexOf("c") != -1) {
+        $("input:checkbox[id='option4']").prop("checked", true);
+        $("input:checkbox[id='option1']").prop("checked", false);
+    }
+    if (address_check.indexOf("d") != -1) {
+        $("input:checkbox[id='option5']").prop("checked", true);
+        $("input:checkbox[id='option1']").prop("checked", false);
+    }
+    if (address_check.indexOf("e") != -1) {
+        $("input:checkbox[id='option6']").prop("checked", true);
+        $("input:checkbox[id='option1']").prop("checked", false);
+    }
+    if (address_check.indexOf("f") != -1) {
+        $("input:checkbox[id='option7']").prop("checked", true);
+        $("input:checkbox[id='option1']").prop("checked", false);
+    }
+    if (address_check.indexOf("g") != -1) {
+        $("input:checkbox[id='option8']").prop("checked", true);
+        $("input:checkbox[id='option1']").prop("checked", false);
+    }
+    if (address_check.indexOf("h") != -1) {
+        $("input:checkbox[id='option9']").prop("checked", true);
+        $("input:checkbox[id='option1']").prop("checked", false);
+    }
+    if (address_check.indexOf("i") != -1) {
+        $("input:checkbox[id='option10']").prop("checked", true);
+        $("input:checkbox[id='option1']").prop("checked", false);
+    }
+    if (address_check.indexOf("j") != -1) {
+        $("input:checkbox[id='option11']").prop("checked", true);
+        $("input:checkbox[id='option1']").prop("checked", false);
+    }
+    if (address_check.indexOf("k") != -1) {
+        $("input:checkbox[id='option12']").prop("checked", true);
+        $("input:checkbox[id='option1']").prop("checked", false);
+    }
+
+
+    // 맵 재검색 기능 start
+    function map_reload(){
+        map = new google.maps.Map(document.getElementById('map'), {
+            zoom: map.getZoom(),
+            center: map.getCenter()
+        });
+        var sw_lat;
+        var sw_lng;
+        var ne_lat;
+        var ne_lng;
+
+        google.maps.event.addListenerOnce(map, 'bounds_changed', function() {
+            //화면에 나와있는 맵 왼쪽 아래
+            sw_lat=map.getBounds().getSouthWest().lat();
+            sw_lng=map.getBounds().getSouthWest().lng();
+            //화면에 나와있는 맵 오른쪽 위
+            ne_lat=map.getBounds().getNorthEast().lat();
+            ne_lng=map.getBounds().getNorthEast().lng();
+            var title=document.getElementById('title').innerHTML;
+            if(title==null){
+                title=document.getElementById('search_input').value;
+            }
+            var checks="";
+            var options="";
+            $('input:checkbox[name="checkbox"]:checked').each(function() {
+                this.checked = true; //checked 처리
+                if(this.checked){//checked 처리된 항목의 값
+                    checks=checks+this.value;
+                }
+            });
+            $('input:checkbox[name="options"]:checked').each(function() {
+                this.checked = true; //checked 처리
+                if(this.checked){//checked 처리된 항목의 값
+                    options=options+this.value;
+                }
+            });
+
+            url = '/?search_key='+title+'&address_key='+options+'&class_key='+checks+"&startdate="+document.getElementById("startdate").value+"&enddate="+document.getElementById("enddate").value+'&centerlat='+map.getCenter().lat()+'&centerlng='+map.getCenter().lng()+'&zoom='+map.getZoom()+'&sw_lat='+sw_lat+'&sw_lng='+sw_lng+'&ne_lat='+ne_lat+'&ne_lng='+ne_lng+"&count=0";
+            window.open(url,'_self')
+        });
+
+        //window.open(url,'_self')
+    }
+    $('#reload_button').click(function(){
+        var url;
+        map_reload()
+    })
+    // 맵 재검색 기능 end
+
+    // 검색 기능 start
+    $('#search_button').click(function(){
+        var checks="";
+        var options="";
+        //동물 구분
+        if(document.getElementById("class_all").className == "btn btn-primary active"){
+            checks=""
+        }
+        else{
+            var animal_class="mbrai";
+            for(i=0 ; i<animal_class.length; i++){
+                if(document.getElementById("class_"+animal_class[i]).className == "btn btn-primary active"){
+                    checks=checks+animal_class[i];
+                }
+            }
+
+        }
+        //지역 구분
+        if(document.getElementById("region_all").className == "btn btn-primary active"){
+            options=""
+        }
+        else{
+            var region_class="abcdefghijk";
+            for(i=0 ; i<region_class.length; i++){
+                if(document.getElementById("region_"+region_class[i]).className == "btn btn-primary active"){
+                    options=options+region_class[i];
+                }
+            }
+
+        }
+
+        var url = '/?search_key='+document.getElementById('search_input').value+'&address_key='+options+'&class_key='+checks+"&startdate="+document.getElementById("startdate").value+"&enddate="+document.getElementById("enddate").value+"&count=0";
+        window.open(url,'_self')
+    })
+    // 검색 기능 end
+
+</script>
+
+<SCRIPT LANGUAGE="JavaScript" type="text/javascript">
+<!--
+//JS Test
+
+var Request=function(){
+ this.getParameter=function(name){
+  var trnval = '';
+  var nowAddress=unescape(location.href);
+  var parameters=(nowAddress.slice(nowAddress.indexOf('?')+1, nowAddress.length)).split('&');
+  for(var i = 0; i<parameters.length; i++){
+   var varName=parameters[i].split('=')[0];
+   if(varName.toUpperCase() == name.toUpperCase()){
+    trnval=parameters[i].split('=')[1];
+    break;
+   }
+  }
+  return trnval
+ }
+}
+var request = new Request();
+
+// 동물 구분 버튼 선택
+var class_key=request.getParameter('class_key');
+// class 키가 없는 경우 전체를 의미함.
+if(class_key==0){
+    document.getElementById("class_all").className = "btn btn-primary active";
+}
+// class가 선택 되어있는 경우 class를 선택 처리로 변경함.
+else {
+    for(i=0; i<class_key.length;i++){
+        document.getElementById("class_"+class_key[i]).className = "btn btn-primary active";
+    }
+}
+// 전체를 선택하면 다른 버튼들 비활성화 시키기
+var animal_class="mbrai"
+document.getElementById('class_all').onclick = function() {
+        for(i=0; i<animal_class.length;i++){
+        document.getElementById("class_"+animal_class[i]).className = "btn btn-primary";
+    }
+}
+// 전체가 활성화 되어있을때 다른것을 선택하면 전체가 비활성화 시키기
+for(i=0; i<animal_class.length;i++){
+    document.getElementById("class_"+animal_class[i]).onclick =function() {
+        document.getElementById("class_all").className = "btn btn-primary";
+    }
+}
+
+
+// 지역 구분 버튼 선택
+var region_key=request.getParameter('address_key');
+// class 키가 없는 경우 전체를 의미함.
+if(region_key==0){
+    document.getElementById("region_all").className = "btn btn-primary active";
+}
+// class가 선택 되어있는 경우 class를 선택 처리로 변경함.
+else {
+    for(i=0; i<region_key.length;i++){
+        document.getElementById("region_"+region_key[i]).className = "btn btn-primary active";
+    }
+}
+// 전체를 선택하면 다른 버튼들 비활성화 시키기
+var animal_region="abcdefghijk"
+document.getElementById('region_all').onclick = function() {
+        for(i=0; i<animal_region.length;i++){
+        document.getElementById("region_"+animal_region[i]).className = "btn btn-primary";
+    }
+}
+// 전체가 활성화 되어있을때 다른것을 선택하면 전체가 비활성화 시키기
+for(i=0; i<animal_region.length;i++){
+    document.getElementById("region_"+animal_region[i]).onclick =function() {
+        document.getElementById("region_all").className = "btn btn-primary";
+    }
+}
+
+//기간 부분 작성하기
+var startdate=request.getParameter('startdate');
+var enddate=request.getParameter('enddate');
+if(startdate!=""){
+    document.getElementById("startdate").value=startdate
+}
+if(enddate!=""){
+    document.getElementById("enddate").value=enddate
+}
+//-->
+
+</SCRIPT>
+
+
+<!-- Plotly.js -->
+
+{% endblock %}

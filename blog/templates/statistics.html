@@ -1,0 +1,454 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+{% block css %}
+
+<style type="text/css">
+	.in{
+			width: 100%;
+			text-align: center;
+	}
+	.post{
+		width: 70%; 
+		display: inline-block;
+	}
+	.title {
+		text-align: left;
+	}
+	.img{
+		float:left;
+		text-align: left;
+		width: 48%;
+		margin-left: 2%;
+	}
+	.sound{
+		float:left;
+		text-align: left;
+		width: 46%;
+		margin-left: 2%;
+		margin-right: 2%;
+	
+	}
+	.content{
+		text-align: left;
+		width: 48%;
+	
+	}
+	p {text-align: left;}
+	.img img {
+		height: 80%;
+		width: 80%;
+	}
+	a{
+		color: #000000;
+	}
+</style>
+
+{% endblock%}
+
+<div class="col-lg-8 col-sm-12 col-md-12">
+
+
+    <div id="map" style="width:100%; height: 800px;float: left; border-radius:0.8em;" >  </div>
+    </div>
+<div class="col-lg-4 col-sm-12 col-md-12">
+    <div style="width:100%;float: left;">
+            <div id="out" style="/*width: 100%;*/">
+    <!--표1 start-->
+            <div id="myDiv" ></div>
+            <!--표1 end-->
+            <!--표2 start-->
+            <div id="tester2"> </div>
+                <p>좀 더 자세히 검색하고 싶다면? </p><a href="../detailsearch">클릭클릭!</a>
+            <!--표2 end-->
+        </div>
+
+        <!--
+        <p>{{file_meta_dict.file_count_address}}</p>
+        <p>포유류: <span id="m"></span></p>
+        <p>조류: <span id="b"></span></p>
+        <p>파충류: <span id="r"></span></p>
+        <p>양서류: <span id="a"></span></p>
+        <p>곤충: <span id="i"></span></p>
+        <p>연도 별 통계<br>
+            <span id="year"></span></p>
+        <p>월 별 통계<br>
+            <span id="month"></span></p>-->
+    </div>
+    </div>
+
+    <div id="pac-input" style="background-color:white; width:180px; border-radius:0.5em;">
+        <p style="font-size:20px;"> <a href="/statistics/?s=all">모든 종 별 통계</a></p>
+        <p style="font-size:20px;"> <a href="/statistics/?s=m">포유류 지역별 통계</a></p>
+        <p style="font-size:20px;"> <a href="/statistics/?s=b">조류 지역별 통계</a></p>
+        <p style="font-size:20px;"> <a href="/statistics/?s=r">파충류 지역별 통계</a></p>
+        <p style="font-size:20px;"> <a href="/statistics/?s=a">양서류 지역별 통계</a></p>
+        <p style="font-size:20px;"> <a href="/statistics/?s=i">곤충 지역별 통계</a></p>
+    </div>
+<script>
+function getParameterByName(name) {
+    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+    results = regex.exec(location.search);
+    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+}
+
+var statistics = getParameterByName('s');
+var map;
+var infoWindow;
+var bermudaTriangle1 ;
+var aa=[];
+var geo;
+var j=0;
+var input = document.getElementById('pac-input');
+// var input1 = document.getElementById('myDiv');
+// var input2 = document.getElementById('tester2');
+//
+// function initMap() {
+//     map = new google.maps.Map(document.getElementById('map'), {
+//           zoom: 7,
+//           center: {lat: 36.489, lng: 127.398},
+//           mapTypeId: 'terrain'
+//     });
+//     //map.controls[google.maps.ControlPosition.RIGHT_TOP].push(input1);
+//     map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(input2);
+//     map.controls[google.maps.ControlPosition.LEFT].push(input);
+//
+// {% for animaldistrict in animaldistricts %}
+//     var triangleCoords=[];
+//     geo="{{animaldistrict.WKT}}";
+//     var contentuid = "{{animaldistrict.id}}";
+//     var geos=geo.split('MULTIPOLYGON (((')[1].split(')),')[0].split('),')[0].split(',');
+//     for (var i in geos) {
+//         triangleCoords[i]={lat: parseFloat(geos[i].split(' ')[1]), lng: parseFloat(geos[i].split(' ')[0])};
+//     }
+//
+//
+//     var triangleCoord = triangleCoords;
+//     aa[contentuid]=triangleCoords;
+//     bermudaTriangle1=new google.maps.Polygon({
+//       paths: triangleCoord,
+//       strokeColor: '#FFFF00',
+//       strokeOpacity: 0.8,
+//       strokeWeight: 3,
+//       fillColor: '#669966',
+//       fillOpacity: 0.35
+//     });
+//     bermudaTriangle1.setMap(map);
+//     bermudaTriangle1.addListener('click',function(event) {
+//         // Since this polygon has only one path, we can call getPath() to return the
+//         // MVCArray of LatLngs.
+//         var contentString = "{{animaldistrict.CTP_KOR_NM}}";
+//
+//         asd(contentString,statistics);
+//         //$('.test').text("{{animaldistrict.CTP_KOR_NM}}");
+//         // Replace the info window's content and position.
+//         infoWindow.setContent(contentString);
+//         infoWindow.setPosition(event.latLng);
+//         infoWindow.open(map);
+//     });
+//     j=j+1;
+// {% endfor %}
+//     infoWindow = new google.maps.InfoWindow;
+// } //initMap end
+</script>
+<!--<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDWV0tlx-1gtFEIJPEdpIFWdGGghKB34xk&libraries=places&callback=initMap&region=KR"async defer></script>-->
+<!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>-->
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=4d099ffcf80745413cb9e87556bf5975"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+
+<script>
+
+var areas=[];
+var j=0;
+    {% for animaldistrict in animaldistricts %}
+    var triangleCoords=[];
+
+    geo="{{animaldistrict.WKT}}";
+    var contentuid = "{{animaldistrict.CTP_KOR_NM}}";
+    var geos=geo.split('MULTIPOLYGON (((')[1].split(')),')[0].split('),')[0].split(',');
+    for (var i in geos) {
+        triangleCoords[i]=new kakao.maps.LatLng(parseFloat(geos[i].split(' ')[1]),parseFloat(geos[i].split(' ')[0]));
+    }
+    areas[j++]= {name: contentuid, path: triangleCoords}
+
+    {% endfor %}
+    console.log(areas)
+var mapContainer = document.getElementById('map'), // 지도를 표시할 div
+    mapOption = {
+        center: new kakao.maps.LatLng(36.489, 127.398), // 지도의 중심좌표
+        level: 13 // 지도의 확대 레벨
+    };
+
+var map = new kakao.maps.Map(mapContainer, mapOption),
+    customOverlay = new kakao.maps.CustomOverlay({}),
+    infowindow = new kakao.maps.InfoWindow({removable: true});
+
+var mapTypeControl = new kakao.maps.MapTypeControl();
+map.addControl(input, kakao.maps.ControlPosition.TOPLEFT);
+
+// 지도에 영역데이터를 폴리곤으로 표시합니다
+for (var i = 0, len = areas.length; i < len; i++) {
+    displayArea(areas[i]);
+}
+
+// 다각형을 생상하고 이벤트를 등록하는 함수입니다
+function displayArea(area) {
+
+    // 다각형을 생성합니다
+    var polygon = new kakao.maps.Polygon({
+        map: map, // 다각형을 표시할 지도 객체
+        path: area.path,
+        strokeWeight: 1.3,
+        strokeColor: '#008034',
+        strokeOpacity: 0.8,
+        fillColor: '#fff',
+        fillOpacity: 0.3
+    });
+
+    // 다각형에 mouseover 이벤트를 등록하고 이벤트가 발생하면 폴리곤의 채움색을 변경합니다
+    // 지역명을 표시하는 커스텀오버레이를 지도위에 표시합니다
+    kakao.maps.event.addListener(polygon, 'mouseover', function(mouseEvent) {
+        polygon.setOptions({fillColor: '#08f'});
+
+        customOverlay.setContent('<div class="area">' + area.name + '</div>');
+
+        customOverlay.setPosition(mouseEvent.latLng);
+        customOverlay.setMap(map);
+    });
+
+    // 다각형에 mousemove 이벤트를 등록하고 이벤트가 발생하면 커스텀 오버레이의 위치를 변경합니다
+    kakao.maps.event.addListener(polygon, 'mousemove', function(mouseEvent) {
+
+        customOverlay.setPosition(mouseEvent.latLng);
+    });
+
+    // 다각형에 mouseout 이벤트를 등록하고 이벤트가 발생하면 폴리곤의 채움색을 원래색으로 변경합니다
+    // 커스텀 오버레이를 지도에서 제거합니다
+    kakao.maps.event.addListener(polygon, 'mouseout', function() {
+        polygon.setOptions({fillColor: '#fff'});
+        customOverlay.setMap(null);
+    });
+
+    // 다각형에 click 이벤트를 등록하고 이벤트가 발생하면 다각형의 이름과 면적을 인포윈도우에 표시합니다
+    kakao.maps.event.addListener(polygon, 'click', function(mouseEvent) {
+        asd(area.name,statistics);
+        // infowindow.setPosition(mouseEvent.latLng);
+        // infowindow.setMap(map);
+    });
+}
+</script>
+
+
+<script type="text/javascript">
+function  asd(contentString,statistics){
+    // initMap();
+    var triangleCoord;
+    var pk ="";
+    if(contentString=="서울시"){ //0
+        pk="a";
+        triangleCoord=aa[1];
+        }
+    else if(contentString=="경기도"){ //0
+        pk="b";
+        triangleCoord=aa[18];
+        }
+    else if(contentString=="강원도"){ //0
+        pk="c";
+        triangleCoord=aa[2];
+        }
+    else if(contentString=="충청북도"){
+        pk="d";
+        triangleCoord=aa[13];
+        }
+    else if(contentString=="충청남도"){  //0
+        pk="e";
+        triangleCoord=aa[5];
+        }
+    else if(contentString=="경상북도"){
+        pk="f";
+        triangleCoord=aa[6];
+        }
+    else if(contentString=="경상남도"){  //0
+        pk="g";
+        triangleCoord=aa[4];
+        }
+    else if(contentString=="전라북도"){
+        pk="h";
+        triangleCoord=aa[8];
+        }
+    else if(contentString=="전라남도"){
+        triangleCoord=aa[10];
+        pk="i";
+        }
+    else if(contentString=="제주도"){
+        triangleCoord=aa[14];
+        pk="j";
+        }
+    else if(contentString=="이북"){
+        pk="k";
+        }
+    else if(contentString=="세종시"){
+        triangleCoord=aa[16]
+        pk="l";
+    }
+    else if(contentString=="인천"){
+        triangleCoord=aa[15]
+        pk="m";
+    }
+    else if(contentString=="대전"){
+        triangleCoord=aa[7]
+        pk="n";
+    }
+    else if(contentString=="울산"){
+        triangleCoord=aa[9]
+        pk="o";
+    }
+    else if(contentString=="대구"){
+        triangleCoord=aa[12]
+        pk="p";
+    }
+    else if(contentString=="부산"){
+        triangleCoord=aa[3]
+        pk="q";
+    }
+
+
+    $.ajax({
+          type: "POST",
+          url: "{% url 'dn' %}", // 통신할 url을 지정
+          data: {'pk': pk,'statistics':statistics,'csrfmiddlewaretoken': '{{ csrf_token }}'}, // 서버로 데이터 전송시 옵션
+          dataType: "json", // 서버측에서 전송한 데이터를 어떤 형식의 데이터로서 해석할 것인가를 지정, 없으면 알아서 판단
+          // 서버측에서 전송한 Response 데이터 형식 (json)
+          success: function(response){ // 통신 성공시 - 동적으로 좋아요 갯수 변경, 유저 목록 변경
+            //초기화
+            $("#m").text(0);
+            $("#b").text(0);
+            $("#r").text(0);
+            $("#a").text(0);
+            $("#i").text(0);
+            $("#year").text("");
+
+            if(statistics=='all'||statistics==''){
+                $("#m").text(response.region_count_ex.m);
+                $("#b").text(response.region_count_ex.b);
+                $("#r").text(response.region_count_ex.r);
+                $("#a").text(response.region_count_ex.a);
+                $("#i").text(response.region_count_ex.i);
+
+                var data = [{
+                values: [0, 0, 0,0,0],
+                labels: ['포유류', '조류', '파충류','양서류','곤충'],
+                type: 'pie'
+                }];
+                var data = [{
+                values: [response.region_count_ex.m, response.region_count_ex.b, response.region_count_ex.r,response.region_count_ex.a,response.region_count_ex.i],
+                labels: ['포유류', '조류', '파충류','양서류','곤충'],
+                type: 'pie'
+                }];
+
+            Plotly.newPlot('tester2', data, {}, {showSendToCloud:true});
+            }
+            else{
+                var statisticsname;
+                if(statistics =='m'){
+                    statisticsname=contentString+"에 있는 표유류 연도별 계체수"
+                }
+                else if(statistics =='b'){
+                    statisticsname=contentString+"에 있는 조류 연도별 계체수"
+                }
+                else if(statistics =='r'){
+                    statisticsname=contentString+"에 있는 파충류 연도별 계체수"
+                }
+                else if(statistics =='a'){
+                    statisticsname=contentString+"에 있는 양서류 연도별 계체수"
+                }
+                else if(statistics =='i'){
+                    statisticsname=contentString+"에 있는 곤충 연도별 계체수"
+                }
+                var yearname=[];
+                var yearvalue=[];
+                for(key in response.year_count_ex) {
+                    $("#year").append('연도:' + key + ' / ' + '결과 값:' + response.year_count_ex[key]+'<br>');
+                    yearname.push(key);
+                    yearvalue.push(String(response.year_count_ex[key]));
+                 }
+                for(key in response.month_count_ex) {
+                    $("#month").append('월별:' + key + ' / ' + '결과 값:' + response.month_count_ex[key]+'<br>');
+                 }
+                var data = [
+                  {
+                    x: yearname,
+                    y: yearvalue,
+                    type: 'bar',
+                        marker: {
+                        color: '#669966',
+                        line: {
+                            width: 2
+                        }
+                    }
+                  }
+                ];
+                var layout = {
+                  title: statisticsname,
+                  xaxis: {tickformat:'.0f'},
+                  font: {size: 11}
+                };
+                Plotly.newPlot('tester2', data,layout);
+             }
+          },
+          error: function(request, status, error){ // 통신 실패시
+            alert("실패")
+          },
+        });
+}
+</script>
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<script type="text/javascript">
+//표1 스크립트
+var name;
+if(statistics =='m'){
+    name="표유류"
+}
+else if(statistics =='b'){
+    name="조류"
+}
+else if(statistics =='r'){
+    name="파충류"
+}
+else if(statistics =='a'){
+    name="양서류"
+}
+else if(statistics =='i'){
+    name="곤충"
+} else {
+ name="모든"
+}
+var data = [
+  {
+    x: ['서울', '경기도','강원도', '충북', '충남','경북','경남','전북','전남','제주','이북'],
+    y: [{{file_meta_dict.file_count_address.서울특별시}}, {{file_meta_dict.file_count_address.경기도}}, {{file_meta_dict.file_count_address.강원도}},{{file_meta_dict.file_count_address.충청북도}},{{file_meta_dict.file_count_address.충청남도}},{{file_meta_dict.file_count_address.경상북도}},{{file_meta_dict.file_count_address.경상남도}},{{file_meta_dict.file_count_address.전라북도}},{{file_meta_dict.file_count_address.전라남도}},{{file_meta_dict.file_count_address.제주도}},{{file_meta_dict.file_count_address.이북}}],
+    type: 'bar',
+        marker: {
+        color: '#669966',
+        line: {
+            width: 2.5
+        }
+    }
+  }
+];
+var layout = {
+  title: name+' 계체 통계',
+  font: {size: 11}
+};
+Plotly.newPlot('myDiv', data,layout);
+//표1 나오는 스크립트 end
+</script>
+
+
+
+
+
+{% endblock %}

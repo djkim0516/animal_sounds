@@ -1,0 +1,12 @@
+Django==2.0.13
+psycopg2==2.7.7
+psycopg2-binary==2.7.7
+django-betterforms==1.2
+tensorflow==1.14
+sparqlwrapper
+Pillow
+bs4
+django-user-agents
+librosa
+h5py==2.8.0
+pydub

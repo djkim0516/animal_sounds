@@ -1,0 +1,515 @@
+{% extends 'mobile/base.html' %}
+
+
+{% block content %}
+
+{% block css %}
+
+<style type="text/css">
+	.in{
+		/*font-size: 2.5em;*/
+		width: 100%;
+		text-align: center;
+	}
+	.post{
+		width: 70%; 
+		display: inline-block;
+	}
+	.title {
+		text-align: left;
+	}
+	.img{
+		float:left;
+		text-align: left;
+		width: 48%;
+		margin-left: 2%;
+	}
+	.sound{
+		float:left;
+		text-align: left;
+		width: 46%;
+		margin-left: 2%;
+		margin-right: 2%;
+	
+	}
+	.content{
+		/*font-size: 2.5em;*/
+		text-align: left;
+		width: 48%;
+	
+	}
+	p {text-align: left;}
+	.img img {
+		height: 80%;
+		width: 80%;
+	}
+	a{
+		color: #000000;
+	}
+	h4{
+		font-size: 2.5em;
+	}
+	pre{
+		font-size: 2.5em;
+	}
+</style>
+
+{% endblock%}
+
+<div class="in"  style="width: 960px; margin-top: 10px; margin-left: auto; margin-right: auto;">
+	<!--mainpage top start-->
+	<br>
+    <div class="post" style=" margin-left: auto; margin-right: auto;">
+		<div style="display: contents; width: 100px; height: 100px; margin-right: auto; margin-left: auto;">
+    	<img src="/media/{{animal_map.imagefile}}" style="vertical-align: top; width:320px" onerror="this.src='/media/No_image.png'">&nbsp;&nbsp;
+		</div>
+			<div style="display: inline-block; width: 500px; margin-right: auto; margin-left: auto;">
+				<h1 class='title' style="display: inline;">{{ animal_map.title1 }}</h1>
+			<span class="control hidden" id = "control_id{{ forloop.counter0 }}">
+			<a>종: __ 속: __ 과: __ 목: __ 강: __ 문: __ 계: __ </a>
+								<br>
+				<a style="text-align: left; font-size: 150%;">관리등급: <b>멸종위기종</b></a>
+		</span>
+    </div>
+	</div>
+	<!--수정과 삭제 부분 -->
+			{% if user.username == animal_map.writer %}
+		<br>
+				<a href="{% url 'animal_remove' pk=animal_map.pk %}" style="text-decoration: underline; float: right;">삭제</a>
+				<a href="{% url 'animal_edit' pk=animal_map.pk %}" style="text-decoration: underline; float: right;">수정</a>
+			{% else %}
+
+			{% endif %}
+
+			<!--수정과 삭제 부분 -->
+	<br>
+	<br>
+    <div style="height: 200px;">
+    		<!--jplater start-->
+			<div id="jquery_jplayer_1" class="jp-jplayer"></div>
+			<div id="jp_container_1" class="jp-audio" role="application" aria-label="media player" style="margin-left: auto; margin-right: auto;">
+				<div class="jp-type-single">
+					<div class="jp-gui jp-interface">
+						<div class="jp-controls">
+							<button class="jp-play" role="button" tabindex="0">play</button>
+							<button class="jp-stop" role="button" tabindex="0">stop</button>
+						</div>
+						<div class="jp-progress">
+							<div class="jp-seek-bar">
+								<div class="jp-play-bar"></div>
+							</div>
+						</div>
+						<div class="jp-volume-controls">
+							<button class="jp-mute" role="button" tabindex="0">mute</button>
+							<button class="jp-volume-max" role="button" tabindex="0">max volume</button>
+							<div class="jp-volume-bar">
+								<div class="jp-volume-bar-value"></div>
+							</div>
+						</div>
+						<div class="jp-time-holder">
+							<div class="jp-current-time" role="timer" aria-label="time">&nbsp;</div>
+							<div class="jp-duration" role="timer" aria-label="duration">&nbsp;</div>
+							<div class="jp-toggles">
+								<button class="jp-repeat" role="button" tabindex="0">repeat</button>
+							</div>
+						</div>
+					</div>
+					<div class="jp-details">
+						<div class="jp-title" aria-label="title" style="font-size: 1.75em;">&nbsp;</div>
+					</div>
+					<div class="jp-no-solution">
+						<span>Update Required</span>
+						To play the media you will need to either update your browser to a recent version or update your <a href="http://get.adobe.com/flashplayer/" target="_blank">Flash plugin</a>.
+					</div>
+				</div>
+			</div>
+			<!--jplater end-->
+    </div>
+    	<div id="map" style="height: 500px; clear:both; margin-bottom: 30px;" > </div>
+    	<!---->
+    	</div>
+    <!--새부 내용 start-->
+<br>
+<br>
+    <div class='content' style="width: 960px; height: 400px; margin-right: auto; margin-left: auto;">
+		<div class='content_2' style="width: 80%; margin-right: auto; margin-left: auto;">
+			<h4 style="text-align: center;">세부 내용</h4>
+			<p>내부 정보</p>
+			<p>{{ total_info.content }}</p>
+			<p>LOD 정보</p>
+			<pre style="white-space: pre-wrap;">{{ animals }}
+			</pre>
+			<a href="{{url}}">더 자세한 정보</a>
+
+		       <br>
+					</div>
+			<div id="svg-body" class="panel-body"></div>
+		<p style="text-align: right; margin-bottom: 0px;">작성자: <span class="writer_name">{{animal_map.writer}}</span></p>
+		<p style="text-align: right;">업로드 일자: <span class="observed_date">{{animal_map.observed_date}}</span></p>
+
+
+		<div class='youtube' style="width: 960px; height: 400px; margin-right: auto; margin-left: auto;">
+			<h4 style="text-align: center;">관련 동영상</h4>
+<div class="youtube" style="width: 960px; height: 400px; margin-right: auto; margin-left: auto;">
+  <div style="width: 80%; margin-right: auto; margin-left: auto;">
+    <div id="youtube-player"></div>
+	  <p id="video-title"></p>
+    <iframe id="youtube" width="560" height="315" src="" frameborder="0" allowfullscreen></iframe>
+  </div>
+</div>
+		</div>
+    </div>
+    <!--새부 내용 end-->
+    </div>
+</div>
+
+    <script type="text/javascript">
+    //<jplater script
+    $(document).ready(function(){
+		$("#jquery_jplayer_1").jPlayer({
+			ready: function (event) {
+				$(this).jPlayer("setMedia", {
+					title: "{{ animal_map.title1 }} 소리",
+					mp3: "/media/{{ subfile.file }}",
+				});
+			},
+			swfPath: "../../dist/jplayer",
+			supplied: "m4a, oga,mp3",
+			wmode: "window",
+			useStateClassSkin: true,
+			autoBlur: false,
+			smoothPlayBar: true,
+			keyEnabled: true,
+			remainingDuration: true,
+			toggleDuration: true
+		});
+	});
+
+    </script>
+
+
+    <script>
+
+      function initMap() {
+        var myLatLng = {lat: {{animal_map.Latitude}}, lng: {{animal_map.Longitude}}};
+
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 14,
+          center: myLatLng
+        });
+
+        var marker = new google.maps.Marker({
+          position: myLatLng,
+          map: map,
+          title: '{{animal_map.title}} 발견 장소'
+        });
+      }
+    </script>
+<script>
+	$.ajax({
+  dataType: "json",
+  url:
+    'https://www.googleapis.com/youtube/v3/search'+
+    '?part=snippet'+
+    '&maxResults=10'+
+    '&q={{ spename }}'+
+    '&type=video'+
+    '&videoDefinition=high'+
+    '&key=AIzaSyDWV0tlx-1gtFEIJPEdpIFWdGGghKB34xk'
+}).done(function(data){
+	$('#video-title').text(data.items[0].snippet.title);
+	document.getElementById("youtube").src = "https://www.youtube.com/embed/"+data.items[0].id.videoId;
+ });
+</script>
+
+<!--    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDWV0tlx-1gtFEIJPEdpIFWdGGghKB34xk&libraries=places&callback=initMap"-->
+<!--         async defer></script>-->
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=4d099ffcf80745413cb9e87556bf5975"></script>
+
+<script>
+	var container = document.getElementById('map'); //지도를 담을 영역의 DOM 레퍼런스
+var options = { //지도를 생성할 때 필요한 기본 옵션
+	center: new kakao.maps.LatLng({{animal_map.Latitude}}, {{animal_map.Longitude}}), //지도의 중심좌표.
+	level: 4 //지도의 레벨(확대, 축소 정도)
+};
+var map = new kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
+var markerPosition  = new kakao.maps.LatLng({{animal_map.Latitude}}, {{animal_map.Longitude}});
+	var marker = new kakao.maps.Marker({
+    position: markerPosition
+});
+	marker.setMap(map);
+</script>
+<style>
+	.node {
+		stroke: #fff;
+		fill:#ddd;
+		stroke-width: 1.5px;
+	}
+	.class {
+		stroke: #fff;
+		fill: #dd0018;
+		stroke-width: 1px;
+	}
+	.instance {
+		stroke: #fff;
+		fill: #183ddd;
+		stroke-width: 1.5px;
+	}
+	.link {
+		fill: none;
+		stroke: #999;
+		stroke-opacity: .6;
+	}
+
+	marker {
+		stroke: #999;
+		fill:rgba(124,240,10,0);
+	}
+
+	.node-text {
+		font: 15px sans-serif;
+		fill:black;
+	}
+	.instance-text{
+		font: 15px sans-serif;
+		fill:black;
+	}
+
+	.link-text {
+		font: 9px sans-serif;
+		fill:grey;
+	}
+	/*svg{*/
+	/*	border:1px solid black;*/
+	/*}*/
+
+</style>
+<script>
+		function filterNodesById(nodes,id){
+			return nodes.filter(function(n) { return n.id === id; });
+		}
+
+		function filterNodesByType(nodes,value){
+			return nodes.filter(function(n) { return n.type === value; });
+		}
+
+		function triplesToGraph(triples){
+
+			svg.html("");
+			//Graph
+			var graph={nodes:[], links:[], triples:[]};
+
+			//Initial Graph from triples
+			triples.forEach(function(triple){
+				var subjId = triple.subject;
+				var predId = triple.predicate;
+				var objId = triple.object;
+				var IdClass = triple.class;
+				console.log(IdClass);
+				var subjNode = filterNodesById(graph.nodes, subjId)[0];
+				var objNode  = filterNodesById(graph.nodes, objId)[0];
+				// console.log(subjNode);
+				if(subjNode==null&&IdClass=="node"){
+					subjNode = {id:subjId, label:subjId, weight:1, type:"instance"};
+					graph.nodes.push(subjNode);
+				}
+				if(objNode==null&&IdClass=="node"){
+					objNode = {id:objId, label:objId, weight:1, type:"node"};
+					graph.nodes.push(objNode);
+				}
+				var predNode = {id:predId, label:predId, weight:1, type:"pred"} ;
+				graph.nodes.push(predNode);
+
+				var blankLabel = "";
+
+				graph.links.push({source:subjNode, target:predNode, predicate:blankLabel, weight:1});
+				graph.links.push({source:predNode, target:objNode, predicate:blankLabel, weight:1});
+
+				graph.triples.push({s:subjNode, p:predNode, o:objNode});
+
+			});
+
+			return graph;
+		}
+
+
+		function update(){
+			// ==================== Add Marker ====================
+			svg.append("svg:defs").selectAll("marker")
+			    .data(["end"])
+			  .enter().append("svg:marker")
+			    .attr("id", String)
+			    .attr("viewBox", "0 -5 10 10")
+			    .attr("refX", 30)
+			    .attr("refY", -0.5)
+			    .attr("markerWidth", 6)
+			    .attr("markerHeight", 6)
+			    .attr("orient", "auto")
+			  .append("svg:polyline")
+			    .attr("points", "0,-5 10,0 0,5")
+			    ;
+
+			// ==================== Add Links ====================
+			 var links = svg.selectAll(".link")
+								.data(graph.triples)
+								.enter()
+								.append("path")
+									.attr("marker-end", "url(#end)")
+									.attr("class", "link")
+							;
+
+			// ==================== Add Link Names =====================
+			var linkTexts = svg.selectAll(".link-text")
+		                .data(graph.triples)
+		                .enter()
+		                .append("text")
+							.attr("class", "link-text")
+							.text( function (d) { return d.p.label; })
+						;
+
+				//linkTexts.append("title")
+				//		.text(function(d) { return d.predicate; });
+			// ==================== Add Link Names =====================
+			var classTexts = svg.selectAll(".node-text")
+		                .data(filterNodesByType(graph.nodes, "class"))
+		                .enter()
+		                .append("text")
+							.attr("class", "class-text")
+							.text( function (d) { return d.label; })
+						;
+			console.log(instanceTexts)
+				//nodeTexts.append("title")
+				//		.text(function(d) { return d.label; });
+
+			// ==================== Add Link Names =====================
+			var instanceTexts = svg.selectAll(".node-text")
+		                .data(filterNodesByType(graph.nodes, "instance"))
+		                .enter()
+		                .append("text")
+							.attr("class", "instance-text")
+							.text( function (d) { return d.label; })
+						;
+			console.log(instanceTexts)
+				//nodeTexts.append("title")
+				//		.text(function(d) { return d.label; });
+
+			// ==================== Add Link Names =====================
+			var nodeTexts = svg.selectAll(".node-text")
+		                .data(filterNodesByType(graph.nodes, "node"))
+		                .enter()
+		                .append("text")
+							.attr("class", "node-text")
+							.text( function (d) { return d.label; })
+						;
+
+				//nodeTexts.append("title")
+				//		.text(function(d) { return d.label; });
+			// ==================== Add instance =====================
+			var Class = svg.selectAll(".node")
+					.data(filterNodesByType(graph.nodes, "class"))
+					.enter()
+					.append("circle")
+					.attr("class", "class")
+					.attr("r",14)
+					.call(force.drag)
+			;//instance
+			// ==================== Add instance =====================
+			var instance = svg.selectAll(".node")
+					.data(filterNodesByType(graph.nodes, "instance"))
+					.enter()
+					.append("circle")
+					.attr("class", "instance")
+					.attr("r",14)
+					.attr("onclick", function (d) { return "window.open('http://lod.nature.go.kr/page/"+d.label+"')"; })
+					.call(force.drag)
+			;//instance
+			// ==================== Add Node =====================
+			var nodes = svg.selectAll(".node")
+								.data(filterNodesByType(graph.nodes, "node"))
+								.enter()
+								.append("circle")
+									.attr("class", "node")
+									.attr("r",14)
+									.call(force.drag)
+							;//nodes
+
+			// ==================== Force ====================
+			force.on("tick", function() {
+				Class
+					.attr("cx", function(d){ return d.x/1.7; })
+					.attr("cy", function(d){ return d.y/1.7; })
+					;
+				instance
+					.attr("cx", function(d){ return d.x/1.7; })
+					.attr("cy", function(d){ return d.y/1.7; })
+					;
+				nodes
+					.attr("cx", function(d){ return d.x/1.7; })
+					.attr("cy", function(d){ return d.y/1.7; })
+					;
+
+				links
+					.attr("d", function(d) {
+						  return "M" 	+ d.s.x/1.7 + "," + d.s.y/1.7
+										+ "S" + d.p.x/1.7 + "," + d.p.y/1.7
+										+ " " + d.o.x/1.7 + "," + d.o.y/1.7;
+						})
+					;
+				classTexts
+					.attr("x", function(d) { return d.x/1.7 + 12 ; })
+					.attr("y", function(d) { return d.y/1.7 + 3; })
+					;
+				instanceTexts
+						.attr("x", function(d) { return d.x/1.7 + 12 ; })
+						.attr("y", function(d) { return d.y/1.7 + 3; })
+				;
+
+				nodeTexts
+					.attr("x", function(d) { return d.x/1.7 + 12 ; })
+					.attr("y", function(d) { return d.y/1.7 + 3; })
+					;
+
+				linkTexts
+					.attr("x", function(d) { return 4 + (d.s.x/1.7 + d.p.x/1.7 + d.o.x/1.7)/3  ; })
+					.attr("y", function(d) { return 4 + (d.s.y/1.7 + d.p.y/1.7 + d.o.y/1.7)/3 ; })
+					;
+			});
+
+			// ==================== Run ====================
+			force
+		      .nodes(graph.nodes)
+		      .links(graph.links)
+			  .charge(-500)
+			  .linkDistance(50)
+		      .start()
+			  ;
+		}
+
+
+</script>
+<script src="http://d3js.org/d3.v3.min.js"></script>
+
+<script>
+  	var triples = {{triples|safe}}
+
+  	// var triples=[{ subject: "Passer_montanus",predicate:"brooding",object:"13~14"},{ subject: "Passer_montanus",predicate:"scientificName",object:"Passer montanus"},{ subject: "Passer_montanus",predicate:"label",object:"참새"},{ subject: "Passer_montanus",predicate:"nestLocation",object:"돌 틈, 오래된 나무 구멍, 처마 밑 등"},{ subject: "Passer_montanus",predicate:"eggColor",object:"황갈색 바탕에 갈색 반점"},{ subject: "Passer_montanus",predicate:"colonyReproduction",object:"여러 쌍이 인접해서 새끼를 치기도 한다."},{ subject: "Passer_montanus",predicate:"generalDescription",object:"암컷과 수컷이 비슷하다. 몸의 윗면 전체가 밤색을 띠지만 머리의 색이 더 진하다. 등은 갈색 바탕에 검은 줄무늬가 있으며 가슴과 배는 흰색, 옆구리는 옅은 황갈색이다. 턱밑과 턱 아래 부위, 눈앞은 검은색이고 뺨은 흰색 바탕에 짙은 검은색 반점이 있다. 뒷목에 흰색의 띠가 있어서 몸과 경계를 이룬다. 시가지나 집, 갈대밭, 풀밭과 농경지 등에서 볼 수 있다. 번식기에는 주로 곤충류를 먹지만 그 외에는 벼나 풀씨 등 식물성 먹이를 먹는다. 전국 어디에서나 쉽게 볼 수 있는 흔한 텃새이며 돌 틈, 오래된 나무 구멍, 처마 밑 등에서 번식한다. 주로 마른 풀을 이용하여 둥지를 만들고 4~8개 정도의 알을 낳는다. 알은 황갈색으로 갈색 반점이 있다. 유라시아의 온대와 아열대에 널리 분포하고 우리나라 전역에서 번식하는 가장 흔한 텃새이다."},{ subject: "Passer_montanus",predicate:"bodyLengthOfFemale",object:"14.5"},{ subject: "Passer_montanus",predicate:"nestMaterial",object:"마른풀"},{ subject: "Passer_montanus",predicate:"bodyLengthOfMale",object:"14.5"},{ subject: "Passer_montanus",predicate:"bodyColor",object:"등은 갈색에 검은색 줄무늬가 있다. 목 뒤에는 흰색 가로줄이 있고 날개에는 두 개의 흰색 띠가 있다. 배는 회색이다. 겨울에는 부리 아랫부분에 노란빛이 나타난다. 어린새: 눈 앞부분, 뺨 및 멱의 검은색이 흐리며 부리의 기부가 노란색이다."},{ subject: "Passer_montanus",predicate:"genericName",object:"Passer"},{ subject: "Passer_montanus",predicate:"nonBreedingBehavior",object:"일정한 곳에서 잠을 자며 저녁때가 되면 미루나무 위 또는 대나무 숲에 많은 수가 모여 시끄럽게 운다. 부리를 위로 치켜세우고 꼬리를 부채 모양으로 벌리며 몸은 뒤로 굽히면서 과시행동을 한다."},{ subject: "Passer_montanus",predicate:"scatteringNumber",object:"4~8"},{ subject: "Passer_montanus",predicate:"commonName",object:"참새"},{ subject: "Passer_montanus",predicate:"relatedHistoryDesc",object:"참새는 ≪물명고 物名考≫에 따르면 한자어로 작(雀)이 표준어였고 와작(瓦雀)·빈작(賓雀)·가빈(嘉賓)이라고도 하였다. 특히 늙어서 무늬가 있는 것은 마작(麻雀), 어려서 입이 황색인 것은 황작(黃雀)이라 하였다. -------------------------------------------------------------------------------------------------------------------------------------------------------------------- 천둥하고 번개 치며 우박이 내리다. 경상도의 농부가 우박에 맞아 죽다 크게 천둥하고 번개하며 우박(雨雹)이 내렸다. 경상도 삼기현(三岐縣)에서는 우박의 크기가 탄환(彈丸)만 하였는데, 어떤 사람이 마침 밭으로 달려가다가 맞아서 죽은 일이 있었고, 꿩·뱀·까마귀·참새도 또한 죽은 것이 많았다. 임금이 좌우(左右)에게 이르기를, “전기(傳記)1478) 를 상고하건대, 여름에 우박이 내리는 것은 정령(政令)이 번거롭고 가혹하며, 요역이 과중한 소치라고 하였다. ” 하고, 명하여 이를 써서 의정부에 보이도록 하였다. 【태백산사고본】 7책 17권 26장 A면 -------------------------------------------------------------------------------------------------------------------------------------------------------------------- 내의 양홍달 등을 밖에 내치다 내의(內醫) 양홍달(楊弘達)·박윤덕(朴允德)을 밖에 내치었다. 양홍달 등이 참새고기 전병(煎餠)을 만들어 바치고 금기(禁忌)하는 것을 아뢰지 않았기 때문에 내치었다. 이헌(李軒)을 결박하여 그 불경한 죄를 수죄(數罪)하고 용서하여 환임(還任)시켰다. 【태백산사고본】 15책 34권 33장 B면 -------------------------------------------------------------------------------------------------------------------------------------------------------------------- 태조 성진을 봉안하는 의식 절차 예조에서 태조의 성진(聖眞) 봉안하는 의식 절차를 아뢰었다. “그 날 이른 새벽에 문소전(文昭殿) 중문 밖에 의장병을 나열케 하고, 좌우에 푸른 일산 하나, 붉은 일산 하나, 붉은 양산 하나, 봉을 그린 부채 둘, 참새를 그린 부채 둘, 금도끼 하나, 은도끼 하나, 금작도(金斫刀) 하나, 은작도 하나씩을 세우고, 또 문밖에 남향하여 용루(龍樓)를 세우고, 내시 두 사람이 동쪽 뜰로 해서 올라가 동쪽 문으로 들어가서, 성진 상자를 받들고 가운데 문으로 나와서, 용루 위에 봉안하고, 정문으로 해서 나온 뒤에 의장병이 앞에서 인도하고, 봉안사가 수행한다. 연도에서는 용루가 장차 도착하게 되면, 경기 관찰사가 용루가 지나가는 역로의 주·현 수령들을 인솔하고, 조복을 갖추고, 의장병을 데리고도 경계에서 지영(祗迎)하여, 용루가 바라보이면, 모두 몸을 굽혔다가, 용루가 도착하면 머리를 숙여 네 번 절하고, 예식이 끝나면, 전도(前導)하는 관원 중에서 관 계급이 낮은 자가 앞서 인도하여, 밤 지낼 집에 도착한다. 문밖에는 다만 붉은 줄을 늘이게 하고, 사신과 수령들이 몸을 굽혀 지영하고, 집사 두 사람이 성진 상자를 받들고, 가운데 문으로 해서 들어가 대청의 탁자 위에 모신 뒤에, 의장병은 마당 가운데에서 좌우로 갈라서고, 사신과 수령들이 마당 가운데로 들어가서 동서로 갈라서고"},{ subject: "Passer_montanus",predicate:"cry",object:"짹, 짹'"},{ subject: "Passer_montanus",predicate:"specificEpithet",object:"montanus"},{ subject: "Passer_montanus",predicate:"feed",object:"여름에는 곤충도 적지 않게 잡아먹지만, 계절의 흐름에 따라 식물질이 주식물이 되며 주로 풀씨를 먹는다."},{ subject: "Passer_montanus",predicate:"label",object:"Passer montanus"},{ subject: "Passer_montanus",predicate:"sitting",object:"12~14"},{ subject: "Passer_montanus",predicate:"relatedCutureDesc",object:"속담에는 “참새가 방앗간을 그저 지나랴. ”, “참새가 아무리 떠들어도 구렁이는 움직이지 않는다. ”, “참새가 작아도 일만 잘한다. ”, “참새가 죽어도 짹한다. ”, “참새 굴레 씌우겠다. ” 등 참새가 들어 있는 것이 많다."},{ subject: "montanus",predicate:"brooding",object:"종종종"}];
+
+	var svg = d3.select("#svg-body").append("svg")
+				.attr("viewBox", [0, 0 ,960, 615])
+				;
+
+	var force = d3.layout.force().size([960*1.7, 615*1.7]);
+
+	var graph = triplesToGraph(triples);
+
+	update();
+
+  </script>
+ <script>
+   function test(){
+     alert("yyyy")
+   }
+
+ </script>
+
+{% endblock %}
