@@ -1,4 +1,4 @@
-name: animal_sound_platform
+name: animal_sound_platform2
 channels:
   - defaults
 dependencies:
