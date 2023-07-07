@@ -25,7 +25,9 @@ SECRET_KEY = 't2g^rp7=xyoleufkkjmq7tvgfe888^s*tv&)ycd@*mt2zoez0+'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['121.128.220.9',
+                 '192.168.0.15',
+                 '127.0.0.1']
 
 # Application definition
 
@@ -138,8 +140,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = 'home'
-
-ALLOWED_HOSTS = '*'
 
 ##CORS
 CORS_ORIGIN_ALLOW_ALL=True
